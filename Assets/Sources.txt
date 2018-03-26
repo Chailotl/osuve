@@ -1,0 +1,35 @@
+	Animated Textures
+
+https://gamedev.stackexchange.com/questions/135375/animated-textures-for-models-how-to-write-a-shader
+
+	Terrain Generation
+
+https://www.reddit.com/r/proceduralgeneration/comments/2ma3sk/continuous_landscapes_are_boring/?utm_source=amp&utm_medium=comment_list
+
+	Cave Generation
+
+https://gamedev.stackexchange.com/questions/53400/cave-generation-with-perlin-worms
+
+https://gamedev.stackexchange.com/questions/33590/how-to-generate-caves-that-resemble-those-of-minecraft
+
+https://gamedev.stackexchange.com/questions/53400/cave-generation-with-perlin-worms
+
+	Structure Generation
+
+https://stackoverflow.com/questions/32544383/procedural-structure-generation
+
+https://stackoverflow.com/questions/21248391/procedurally-generated-structures-over-large-quantitys-of-chunks-in-3d-terrain-g
+
+https://gamedev.stackexchange.com/questions/69144/procedurally-generated-structures-over-large-quantitys-of-chunks-in-3d-terrain-g
+
+https://www.reddit.com/r/gamedev/comments/22x7y0/generating_structures_over_several_chunks/
+
+https://www.reddit.com/r/gamedev/comments/16yyqw/how_does_minecraft_generate_structures_especially/
+
+https://www.reddit.com/r/VoxelGameDev/comments/2spclp/minecraft_like_tree_generation_help/
+
+	Optimization
+
+https://gamedev.stackexchange.com/questions/12938/how-can-i-optimise-a-minecraft-esque-voxel-world
+
+https://0fps.net/2012/01/14/an-analysis-of-minecraft-like-engines/
