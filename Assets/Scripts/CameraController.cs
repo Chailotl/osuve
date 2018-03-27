@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	public float speed = 5f;
-	public bool freeLook;
+	[SerializeField] private float speed = 5f;
+	[SerializeField] private bool freeLook;
 
 	private Transform _trans;
 	private float _yaw;
