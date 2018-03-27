@@ -127,7 +127,7 @@ public class Chunk : MonoBehaviour
 		if (x >= 0 && x <= 15 && y >= 0 && y <= 15 && z >= 0 && z <= 15)
 		{
 			// In bounds, we have the data available to us
-			return _chunkData.blocks[x, y, z];
+			return _chunkData.GetBlock(x, y, z);
 		}
 		else if (isolateMesh)
 		{

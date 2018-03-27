@@ -40,17 +40,17 @@ public class World : MonoBehaviour
 
 	public struct DataChunk
 	{
-		public Int3 pos;
-		public GameObject chunk;
-		public Atlas.ID[,,] blocks;
-		private bool generated;
+		private readonly Int3 _pos;
+		private GameObject _chunk;
+		private Atlas.ID[,,] _blocks;
+		private bool _generated;
 
-		public DataChunk(Int3 pos1, GameObject chunk1)
+		public DataChunk(Int3 pos, GameObject chunk)
 		{
-			pos = pos1;
-			chunk = chunk1;
-			blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
-			generated = false;
+			_pos = pos;
+			_chunk = chunk;
+			_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
+			_generated = false;
 		}
 
 		public void GenerateBlocks()
@@ -61,16 +61,36 @@ public class World : MonoBehaviour
 				{
 					for (int z = 0; z < _chunkSize; ++z)
 					{
-						blocks[x, y, z] = GenerateBlock(pos.x * _chunkSize + x, pos.y * _chunkSize + y, pos.z * _chunkSize + z);
+						_blocks[x, y, z] = GenerateBlock(_pos.x * _chunkSize + x, _pos.y * _chunkSize + y, _pos.z * _chunkSize + z);
 					}
 				}
 			}
-			generated = true;
+			_generated = true;
+		}
+
+		public void SetBlock(Atlas.ID block, int x, int y, int z)
+		{
+			_blocks[x, y, z] = block;
+		}
+
+		public Atlas.ID GetBlock(int x, int y, int z)
+		{
+			return _blocks[x, y, z];
+		}
+
+		public void SetChunk(GameObject chunk)
+		{
+			_chunk = chunk;
+		}
+
+		public GameObject GetChunk()
+		{
+			return _chunk;
 		}
 
 		public bool IsGenerated()
 		{
-			return generated;
+			return _generated;
 		}
 	}
 
@@ -139,7 +159,7 @@ public class World : MonoBehaviour
 							newDataChunk = _offloadChunks[pos];
 
 							// Give data chunk gameobject
-							newDataChunk.chunk = newChunk;
+							newDataChunk.SetChunk(newChunk);
 
 							// Remove from offload
 							_offloadChunks.Remove(pos);
@@ -193,7 +213,7 @@ public class World : MonoBehaviour
 
 	private void DestroyChunk(Int3 pos)
 	{
-		Destroy(_chunks[pos].chunk); // Delete corresponding gameobject
+		Destroy(_chunks[pos].GetChunk()); // Delete corresponding gameobject
 		_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
 		_chunks.Remove(pos); // Remove chunk from main list
 	}
@@ -214,7 +234,7 @@ public class World : MonoBehaviour
 		}
 		else
 		{
-			return _chunks[key].blocks[lx, ly, lz];
+			return _chunks[key].GetBlock(lx, ly, lz);
 		}
 	}
 
