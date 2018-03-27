@@ -30,6 +30,8 @@ public class Chunk : MonoBehaviour
 		// One-time only!
 		if (!_loaded)
 		{
+			_loaded = true;
+
 			_chunkX = pos.x;
 			_chunkY = pos.y;
 			_chunkZ = pos.z;
