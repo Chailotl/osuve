@@ -8,3 +8,8 @@ Open-Source Unity Voxel Engine
 [![Codacy](https://api.codacy.com/project/badge/Grade/67c7b10685cf4df186b0dfd28edac497)](https://www.codacy.com/app/Rausy/osuve?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Rausy/osuve&amp;utm_campaign=Badge_Grade)
 [![Issues](https://img.shields.io/github/issues/Rausy/osuve.svg)](https://github.com/Rausy/osuve/issues)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/Rausy/osuve/issues)
+
+# Show me the eye candy!
+Here's a gif of the current state of generation, slightly slowed down by the recording gif.
+
+![Gif](https://i.imgur.com/DKUdhIW.gif)
