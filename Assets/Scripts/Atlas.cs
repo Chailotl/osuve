@@ -6,9 +6,6 @@ public class Atlas : MonoBehaviour
 {
 	public enum ID { Air, Stone, Grass, Dirt, Ore, Log, Leaves };
 
-	//private static int _lenID = System.Enum.GetNames(typeof(ID)).Length;
-	//private static Vector2[] Tex = new Vector2[_lenID];
-
 	public readonly static float tUnit = 0.25f;
 	public enum Dir { Up, Down, North, South, East, West };
 
