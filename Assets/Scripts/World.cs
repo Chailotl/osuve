@@ -36,6 +36,11 @@ public class World : MonoBehaviour
 		{
 			return "(" + x + ", " + y + ", " + z + ")";
 		}
+
+		public bool Equals(Int3 other)
+		{
+			return (this.x == other.x && this.y == other.y && this.z == other.z);
+		}
 	}
 
 	public struct DataChunk
