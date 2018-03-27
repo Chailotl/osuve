@@ -15,16 +15,10 @@ public class Chunk : MonoBehaviour
 	private Mesh _mesh;
 	private MeshCollider _col;
 	private bool _updateMesh;
-	private bool _loaded;
-
-	private int _chunkX;
-	private int _chunkY;
-	private int _chunkZ;
-	private World.DataChunk _chunkData;
-
 	public bool isolateMesh;
 	private bool _updateIso;
 
+<<<<<<< HEAD
 	public void LoadData(World.Int3 pos, World.DataChunk chunkData)
 	{
 		// One-time only!
@@ -35,10 +29,13 @@ public class Chunk : MonoBehaviour
 			_chunkX = pos.x;
 			_chunkY = pos.y;
 			_chunkZ = pos.z;
+=======
+	public int chunkX;
+	public int chunkY;
+	public int chunkZ;
+>>>>>>> parent of 83ba107... Better chunk data security
 
-			_chunkData = chunkData;
-		}
-	}
+	public World.DataChunk chunkData;
 
 	void Start()
 	{
@@ -65,9 +62,9 @@ public class Chunk : MonoBehaviour
 	public void GenerateMesh()
 	{
 		// Check if data chunk blocks are generated
-		if (!_chunkData.IsGenerated())
+		if (!chunkData.IsGenerated())
 		{
-			_chunkData.GenerateBlocks();
+			chunkData.GenerateBlocks();
 		}
 
 		int chunkSize = World.GetChunkSize();
@@ -127,7 +124,7 @@ public class Chunk : MonoBehaviour
 		if (x >= 0 && x <= 15 && y >= 0 && y <= 15 && z >= 0 && z <= 15)
 		{
 			// In bounds, we have the data available to us
-			return _chunkData.blocks[x, y, z];
+			return chunkData.blocks[x, y, z];
 		}
 		else if (isolateMesh)
 		{
@@ -136,7 +133,7 @@ public class Chunk : MonoBehaviour
 		else
 		{
 			// Outside of bounds, need to fetch
-			return World.GenerateBlock(x + _chunkX, y + _chunkY, z + _chunkZ);
+			return World.GenerateBlock(x + chunkX, y + chunkY, z + chunkZ);
 			//return World.Block(chunkX, chunkY, chunkZ, x, y, z);
 		}
 	}
