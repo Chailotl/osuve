@@ -67,9 +67,13 @@ namespace Noise
 		public float GetNoise(double x, double y, double z)
 		{
 			if (Octaves > 1)
+			{
 				return Noise.GetOctaveNoise(x * XScale, y * YScale, z * ZScale, Octaves);
+			}
 			else
+			{
 				return Noise.GetNoise(x * XScale, y * YScale, z * ZScale);
+			}
 		}
 	}
 
@@ -91,13 +95,15 @@ namespace Noise
 			}
 		}
 
-		private static Grad[] grad3 = new Grad[] {
+		private static Grad[] grad3 = new []
+		{
 			new Grad(1,1,0), new Grad(-1,1,0), new Grad(1,-1,0), new Grad(-1,-1,0),
 			new Grad(1,0,1), new Grad(-1,0,1), new Grad(1,0,-1), new Grad(-1,0,-1),
 			new Grad(0,1,1), new Grad(0,-1,1), new Grad(0,1,-1), new Grad(0,-1,-1)
 		};
 
-		private static short[] p = new short[] {
+		private static short[] p = new short[]
+		{
 			151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,190,6,148,
 			247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,
 			74,165,71,134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,102,143,54,
@@ -126,13 +132,13 @@ namespace Noise
 		private static double G3 = 1.0 / 6.0;
 
 		// This method is a *lot* faster than using (int)Math.floor(x)
-		private static int fastfloor(double x)
+		private static int FastFloor(double x)
 		{
 			int xi = (int)x;
 			return x < xi ? xi - 1 : xi;
 		}
 
-		private static double dot(Grad g, double x, double y, double z)
+		private static double Dot(Grad g, double x, double y, double z)
 		{
 			return g.x * x + g.y * y + g.z * z;
 		}
@@ -143,9 +149,9 @@ namespace Noise
 			double n0, n1, n2, n3; // Noise contributions from the four corners
 								   // Skew the input space to determine which simplex cell we're in
 			double s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
-			int i = fastfloor(xin + s);
-			int j = fastfloor(yin + s);
-			int k = fastfloor(zin + s);
+			int i = FastFloor(xin + s);
+			int j = FastFloor(yin + s);
+			int k = FastFloor(zin + s);
 			double t = (i + j + k) * G3;
 			double X0 = i - t; // Unskew the cell origin back to (x,y,z) space
 			double Y0 = j - t;
@@ -159,8 +165,7 @@ namespace Noise
 			int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
 			if (x0 >= y0)
 			{
-				if (y0 >= z0)
-				{ i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; } // X Y Z order
+				if (y0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; } // X Y Z order
 				else if (x0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 0; k2 = 1; } // X Z Y order
 				else { i1 = 0; j1 = 0; k1 = 1; i2 = 1; j2 = 0; k2 = 1; } // Z X Y order
 			}
@@ -193,32 +198,44 @@ namespace Noise
 			int gi3 = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]];
 			// Calculate the contribution from the four corners
 			double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0; // change to 0.5 if you want
-			if (t0 < 0) n0 = 0.0;
+			if (t0 < 0)
+			{
+				n0 = 0.0;
+			}
 			else
 			{
 				t0 *= t0;
-				n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);
+				n0 = t0 * t0 * Dot(grad3[gi0], x0, y0, z0);
 			}
 			double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1; // change to 0.5 if you want
-			if (t1 < 0) n1 = 0.0;
+			if (t1 < 0)
+			{
+				n1 = 0.0;
+			}
 			else
 			{
 				t1 *= t1;
-				n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);
+				n1 = t1 * t1 * Dot(grad3[gi1], x1, y1, z1);
 			}
 			double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2; // change to 0.5 if you want
-			if (t2 < 0) n2 = 0.0;
+			if (t2 < 0)
+			{
+				n2 = 0.0;
+			}
 			else
 			{
 				t2 *= t2;
-				n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);
+				n2 = t2 * t2 * Dot(grad3[gi2], x2, y2, z2);
 			}
 			double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3; // change to 0.5 if you want
-			if (t3 < 0) n3 = 0.0;
+			if (t3 < 0)
+			{
+				n3 = 0.0;
+			}
 			else
 			{
 				t3 *= t3;
-				n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);
+				n3 = t3 * t3 * Dot(grad3[gi3], x3, y3, z3);
 			}
 			// Add contributions from each corner to get the final noise value.
 			// The result is scaled to stay just inside [-1,1] (now [0, 1])

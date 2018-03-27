@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-	[SerializeField] private GameObject chunkPrefab;
+	[SerializeField] private static GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
 	private static Queue<Chunk> _queue = new Queue<Chunk>();
-	private static bool _rendering = false;
+	private static bool _rendering;
 
 	private static int chunkSize = 16;
 	public static int viewRange = 3;
@@ -113,7 +113,7 @@ public class World : MonoBehaviour
 		_rendering = false;
 	}
 
-	private void GenerateChunks()
+	private static void GenerateChunks()
 	{
         // Iterate through x, y, z
         for (int x = playerPos.x - viewRange; x <= playerPos.x + viewRange; ++x)
@@ -176,7 +176,7 @@ public class World : MonoBehaviour
 		}
 	}
 
-	private void PingChunks()
+	private static void PingChunks()
 	{
 		List<Int3> temp = new List<Int3>();
 
