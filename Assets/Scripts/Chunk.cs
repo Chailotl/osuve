@@ -17,9 +17,8 @@ public class Chunk : MonoBehaviour
 	private bool _updateMesh;
 	private bool _loaded;
 
-	private int _chunkX;
-	private int _chunkY;
-	private int _chunkZ;
+	private int _chunkSize;
+	private World.Int3 _chunkPos;
 	private World.DataChunk _chunkData;
 
 	public bool isolateMesh;
@@ -32,10 +31,8 @@ public class Chunk : MonoBehaviour
 		{
 			_loaded = true;
 
-			_chunkX = pos.x;
-			_chunkY = pos.y;
-			_chunkZ = pos.z;
-
+			_chunkSize = World.GetChunkSize();
+			_chunkPos = pos;
 			_chunkData = chunkData;
 		}
 	}
@@ -69,15 +66,13 @@ public class Chunk : MonoBehaviour
 		{
 			_chunkData.GenerateBlocks();
 		}
-
-		int chunkSize = World.GetChunkSize();
-
+		
 		// Iterate through x, y, z
-		for (int x = 0; x < chunkSize; x++)
+		for (int x = 0; x < _chunkSize; x++)
 		{
-			for (int y = 0; y < chunkSize; y++)
+			for (int y = 0; y < _chunkSize; y++)
 			{
-				for (int z = 0; z < chunkSize; z++)
+				for (int z = 0; z < _chunkSize; z++)
 				{
 					Atlas.ID block = Block(x, y, z);
 
@@ -136,7 +131,7 @@ public class Chunk : MonoBehaviour
 		else
 		{
 			// Outside of bounds, need to fetch
-			return World.GenerateBlock(x + _chunkX, y + _chunkY, z + _chunkZ);
+			return World.GenerateBlock(x + _chunkPos.x * _chunkSize, y + _chunkPos.y * _chunkSize, z + _chunkPos.z * _chunkSize);
 			//return World.Block(chunkX, chunkY, chunkZ, x, y, z);
 		}
 	}
