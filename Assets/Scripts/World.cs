@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ public class World : MonoBehaviour
 	private static int _viewRange = 3;
 	private static Int3 _playerPos;
 	
-	public struct Int3
+	public struct Int3 : IEquatable<Int3>
 	{
 		public int x, y, z;
 
