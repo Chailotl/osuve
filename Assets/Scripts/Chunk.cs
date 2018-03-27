@@ -14,9 +14,9 @@ public class Chunk : MonoBehaviour
 
 	private Mesh _mesh;
 	private MeshCollider _col;
-	private bool _updateMesh = false;
-	public bool isolateMesh = false;
-	private bool _updateIso = false;
+	private bool _updateMesh;
+	public bool isolateMesh;
+	private bool _updateIso;
 
 	public int chunkX;
 	public int chunkY;

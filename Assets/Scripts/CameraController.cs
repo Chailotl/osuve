@@ -5,11 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 	public float speed = 5f;
-	public bool freeLook = false;
+	public bool freeLook;
 
 	private Transform _trans;
-	private float _yaw = 0;
-	private float _pitch = 0;
+	private float _yaw;
+	private float _pitch;
 
 	void Start()
 	{

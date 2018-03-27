@@ -9,7 +9,7 @@ public class Atlas : MonoBehaviour
 	//private static int _lenID = System.Enum.GetNames(typeof(ID)).Length;
 	//private static Vector2[] Tex = new Vector2[_lenID];
 
-	public static float tUnit = 0.25f;
+	public readonly static float tUnit = 0.25f;
 	public enum Dir { Up, Down, North, South, East, West };
 
 	private static Vector2 _stone = new Vector2(0, 0);
