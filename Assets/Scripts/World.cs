@@ -6,15 +6,15 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-	[SerializeField] private static GameObject chunkPrefab;
+	[SerializeField] private GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
 	private static Queue<Chunk> _queue = new Queue<Chunk>();
 	private static bool _rendering;
 
-	private static int chunkSize = 16;
-	public static int viewRange = 3;
-	private static Int3 playerPos;
+	private static int _chunkSize = 16;
+	private static int _viewRange = 3;
+	private static Int3 _playerPos;
 	
 	public struct Int3
 	{
@@ -49,19 +49,19 @@ public class World : MonoBehaviour
 		{
 			pos = pos1;
 			chunk = chunk1;
-			blocks = new Atlas.ID[chunkSize, chunkSize, chunkSize];
+			blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
 			generated = false;
 		}
 
 		public void GenerateBlocks()
 		{
-			for (int x = 0; x < chunkSize; ++x)
+			for (int x = 0; x < _chunkSize; ++x)
 			{
-				for (int y = 0; y < chunkSize; ++y)
+				for (int y = 0; y < _chunkSize; ++y)
 				{
-					for (int z = 0; z < chunkSize; ++z)
+					for (int z = 0; z < _chunkSize; ++z)
 					{
-						blocks[x, y, z] = GenerateBlock(pos.x * chunkSize + x, pos.y * chunkSize + y, pos.z * chunkSize + z);
+						blocks[x, y, z] = GenerateBlock(pos.x * _chunkSize + x, pos.y * _chunkSize + y, pos.z * _chunkSize + z);
 					}
 				}
 			}
@@ -76,7 +76,7 @@ public class World : MonoBehaviour
 
 	void Start()
 	{
-		playerPos = new Int3(Camera.main.transform.position / chunkSize);
+		_playerPos = new Int3(Camera.main.transform.position / _chunkSize);
 
 		GenerateChunks();
 
@@ -87,18 +87,18 @@ public class World : MonoBehaviour
 
 	void Update()
 	{
-		Int3 temp = new Int3(Camera.main.transform.position / chunkSize);
+		Int3 temp = new Int3(Camera.main.transform.position / _chunkSize);
 
         // Did player move from their chunk?
-		if (CubeDistance(temp, playerPos) > 0)
+		if (CubeDistance(temp, _playerPos) > 0)
 		{
-			playerPos = temp; // Set new pos
+			_playerPos = temp; // Set new pos
 			GenerateChunks(); // Generate new chunks
 			PingChunks(); // Ping old chunks for deletion
 		}
 	}
 
-	private static void RenderThread()
+	private void RenderThread()
 	{
 		while (_queue.Count > 0)
 		{
@@ -113,14 +113,14 @@ public class World : MonoBehaviour
 		_rendering = false;
 	}
 
-	private static void GenerateChunks()
+	private void GenerateChunks()
 	{
         // Iterate through x, y, z
-        for (int x = playerPos.x - viewRange; x <= playerPos.x + viewRange; ++x)
+        for (int x = _playerPos.x - _viewRange; x <= _playerPos.x + _viewRange; ++x)
 		{
-			for (int y = playerPos.y - viewRange; y <= playerPos.y + viewRange; ++y)
+			for (int y = _playerPos.y - _viewRange; y <= _playerPos.y + _viewRange; ++y)
 			{
-				for (int z = playerPos.z - viewRange; z <= playerPos.z + viewRange; ++z)
+				for (int z = _playerPos.z - _viewRange; z <= _playerPos.z + _viewRange; ++z)
 				{
 					Int3 pos = new Int3(x, y, z);
 
@@ -128,13 +128,13 @@ public class World : MonoBehaviour
 					if (!_chunks.ContainsKey(pos))
 					{
 						// Create new chunk and get corresponding script
-						GameObject newChunk = Instantiate(chunkPrefab, new Vector3(x * chunkSize, y * chunkSize, z * chunkSize), Quaternion.identity);
+						GameObject newChunk = Instantiate(chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
 						Chunk newChunkScript = newChunk.GetComponent<Chunk>();
 
 						// Tell chunk where it exists
-						newChunkScript.chunkX = x * chunkSize;
-						newChunkScript.chunkY = y * chunkSize;
-						newChunkScript.chunkZ = z * chunkSize;
+						newChunkScript.chunkX = x * _chunkSize;
+						newChunkScript.chunkY = y * _chunkSize;
+						newChunkScript.chunkZ = z * _chunkSize;
 						
 						// Queue chunk for generation
 						_queue.Enqueue(newChunkScript);
@@ -176,14 +176,14 @@ public class World : MonoBehaviour
 		}
 	}
 
-	private static void PingChunks()
+	private void PingChunks()
 	{
 		List<Int3> temp = new List<Int3>();
 
         // Collect all chunks that need to be deleted
 		foreach (KeyValuePair<Int3, DataChunk> chunk in _chunks)
 		{
-			if (CubeDistance(chunk.Key, playerPos) > viewRange)
+			if (CubeDistance(chunk.Key, _playerPos) > _viewRange)
 			{
 				temp.Add(chunk.Key);
 			}
@@ -196,7 +196,7 @@ public class World : MonoBehaviour
 		}
 	}
 
-	private static void DestroyChunk(Int3 pos)
+	private void DestroyChunk(Int3 pos)
 	{
 		Destroy(_chunks[pos].chunk); // Delete corresponding gameobject
 		_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
@@ -279,6 +279,11 @@ public class World : MonoBehaviour
 
 	public static int GetChunkSize()
 	{
-		return chunkSize;
+		return _chunkSize;
+	}
+
+	public static int GetViewRange()
+	{
+		return _viewRange;
 	}
 }
