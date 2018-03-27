@@ -131,14 +131,6 @@ public class World : MonoBehaviour
 						GameObject newChunk = Instantiate(chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
 						Chunk newChunkScript = newChunk.GetComponent<Chunk>();
 
-						// Tell chunk where it exists
-						newChunkScript.chunkX = x * _chunkSize;
-						newChunkScript.chunkY = y * _chunkSize;
-						newChunkScript.chunkZ = z * _chunkSize;
-						
-						// Queue chunk for generation
-						_queue.Enqueue(newChunkScript);
-
 						DataChunk newDataChunk;
 
 						if (_offloadChunks.ContainsKey(pos))
@@ -158,9 +150,12 @@ public class World : MonoBehaviour
 							newDataChunk = new DataChunk(pos, newChunk);
 						}
 
-						// Let chunk know its corresponding data chunk
-						newChunkScript.chunkData = newDataChunk;
-						
+						// Let chunk know its corresponding data chunk and position
+						newChunkScript.LoadData(pos, newDataChunk);
+
+						// Queue chunk for generation
+						_queue.Enqueue(newChunkScript);
+
 						// Store in map
 						_chunks[pos] = newDataChunk;
 					}
