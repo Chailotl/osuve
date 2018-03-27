@@ -6,15 +6,15 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-	public GameObject chunkPrefab;
+	[SerializeField] private GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
 	private static Queue<Chunk> _queue = new Queue<Chunk>();
 	private static bool _rendering = false;
 
-	public static int chunkSize = 16;
+	private static int chunkSize = 16;
 	public static int viewRange = 3;
-	public static Int3 playerPos;
+	private static Int3 playerPos;
 	
 	public struct Int3
 	{
@@ -98,6 +98,21 @@ public class World : MonoBehaviour
 		}
 	}
 
+	private static void RenderThread()
+	{
+		while (_queue.Count > 0)
+		{
+			Chunk newChunkScript = _queue.Dequeue();
+
+			if (newChunkScript != null)
+			{
+				newChunkScript.GenerateMesh();
+			}
+		}
+
+		_rendering = false;
+	}
+
 	private void GenerateChunks()
 	{
         // Iterate through x, y, z
@@ -161,21 +176,6 @@ public class World : MonoBehaviour
 		}
 	}
 
-	private void RenderThread()
-	{
-		while (_queue.Count > 0)
-		{
-			Chunk newChunkScript = _queue.Dequeue();
-
-			if (newChunkScript != null)
-			{
-				newChunkScript.GenerateMesh();
-			}
-        }
-
-		_rendering = false;
-	}
-
 	private void PingChunks()
 	{
 		List<Int3> temp = new List<Int3>();
@@ -193,6 +193,33 @@ public class World : MonoBehaviour
 		foreach (Int3 key in temp)
 		{
 			DestroyChunk(key);
+		}
+	}
+
+	private static void DestroyChunk(Int3 pos)
+	{
+		Destroy(_chunks[pos].chunk); // Delete corresponding gameobject
+		_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
+		_chunks.Remove(pos); // Remove chunk from main list
+	}
+
+	public static float CubeDistance(Int3 one, Int3 two)
+	{
+		return Mathf.Max(Mathf.Abs(one.x - two.x), Mathf.Abs(one.y - two.y), Mathf.Abs(one.z - two.z));
+	}
+
+	// This gets blocks that have already been generated in the past
+	public static Atlas.ID Block(int cx, int cy, int cz, int lx, int ly, int lz)
+	{
+		Int3 key = new Int3(cx, cy, cz);
+
+		if (!_chunks.ContainsKey(key))
+		{
+			return GenerateBlock(cx + lx, cy + ly, cz + lz);
+		}
+		else
+		{
+			return _chunks[key].blocks[lx, ly, lz];
 		}
 	}
 
@@ -236,21 +263,6 @@ public class World : MonoBehaviour
 		}
 	}
 
-	// This gets blocks that have already been generated in the past
-	public static Atlas.ID Block(int cx, int cy, int cz, int lx, int ly, int lz)
-	{
-		Int3 key = new Int3(cx, cy, cz);
-
-		if (!_chunks.ContainsKey(key))
-		{
-			return GenerateBlock(cx + lx, cy + ly, cz + lz);
-		}
-		else
-		{
-			return _chunks[key].blocks[lx, ly, lz];
-		}
-	}
-
 	public static float PerlinNoise(float x, float y, float z, float scale, float height, float power)
 	{
 		float rValue;
@@ -265,15 +277,8 @@ public class World : MonoBehaviour
 		return rValue;
 	}
 
-	public static float CubeDistance(Int3 one, Int3 two)
+	public static int GetChunkSize()
 	{
-		return Mathf.Max(Mathf.Abs(one.x - two.x), Mathf.Abs(one.y - two.y), Mathf.Abs(one.z - two.z));
-	}
-
-	public static void DestroyChunk(Int3 pos)
-	{
-		Destroy(_chunks[pos].chunk); // Delete corresponding gameobject
-		_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
-		_chunks.Remove(pos); // Remove chunk from main list
+		return chunkSize;
 	}
 }

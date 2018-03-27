@@ -10,16 +10,13 @@ public class Chunk : MonoBehaviour
 	private List<Vector3> _newVerts = new List<Vector3>();
 	private List<int> _newTris = new List<int>();
 	private List<Vector2> _newUV = new List<Vector2>();
+	private int _faceCount;
 
 	private Mesh _mesh;
 	private MeshCollider _col;
 	private bool _updateMesh = false;
 	public bool isolateMesh = false;
 	private bool _updateIso = false;
-
-	private int _faceCount;
-
-	public int chunkSize = World.chunkSize;
 
 	public int chunkX;
 	public int chunkY;
@@ -51,14 +48,13 @@ public class Chunk : MonoBehaviour
 
 	public void GenerateMesh()
 	{
-		//Stopwatch sw = new Stopwatch();
-		//sw.Start();
-
 		// Check if data chunk blocks are generated
 		if (!chunkData.IsGenerated())
 		{
 			chunkData.GenerateBlocks();
 		}
+
+		int chunkSize = World.GetChunkSize();
 
 		// Iterate through x, y, z
 		for (int x = 0; x < chunkSize; x++)
@@ -105,9 +101,6 @@ public class Chunk : MonoBehaviour
 				}
 			}
 		}
-
-		//sw.Stop();
-		//UnityEngine.Debug.Log("Generated mesh in: " + sw.Elapsed);
 
 		_updateMesh = true;
 	}
