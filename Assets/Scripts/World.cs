@@ -8,10 +8,10 @@ using UnityEngine;
 public class World : MonoBehaviour
 {
 	[SerializeField] private GameObject chunkPrefab;
-	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
-	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
-	private static Queue<Chunk> _queue = new Queue<Chunk>();
-	private static bool _rendering;
+	private Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
+	private Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
+	private Queue<Chunk> _queue = new Queue<Chunk>();
+	private bool _rendering;
 
 	private static int _chunkSize = 16;
 	private static int _viewRange = 3;
