@@ -266,12 +266,6 @@ public class World : MonoBehaviour
 	// This is the main world generation function per block
 	public static Atlas.ID GenerateBlock(int x, int y, int z)
 	{
-		// Topology
-		float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
-		//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
-		//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
-		float dirt = 3;
-
 		// Caves
 		float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
 		caves += PerlinNoise(x, y, z, 30, 8, 0);
@@ -280,7 +274,7 @@ public class World : MonoBehaviour
 		// Underground ores
 		float ore = PerlinNoise(x, y, z, 20, 20, 0);
 		
-		if (y <= stone)
+		if (y <= 0)
 		{
 			if (caves > 16)
 			{
@@ -293,17 +287,43 @@ public class World : MonoBehaviour
 
 			return Atlas.ID.Stone; // Stone layer
 		}
-		else if (y <= stone + dirt)
+		else if (y > 7) // Atmosphere
 		{
-			return Atlas.ID.Dirt; // Dirt cover
-		}
-		else if (y <= stone + dirt + 1)
-		{
-			return Atlas.ID.Grass; // Grass cover
+			return Atlas.ID.Air;
 		}
 		else
 		{
-			return Atlas.ID.Air; // Open Air
+			// Topology
+			float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
+			//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
+			//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
+			float dirt = 3;
+
+			if (y <= stone)
+			{
+				if (caves > 16)
+				{
+					return Atlas.ID.Air; // Generating caves
+				}
+				else if (ore > 18)
+				{
+					return Atlas.ID.Ore;
+				}
+
+				return Atlas.ID.Stone; // Stone layer
+			}
+			else if (y <= stone + dirt)
+			{
+				return Atlas.ID.Dirt; // Dirt cover
+			}
+			else if (y <= stone + dirt + 1)
+			{
+				return Atlas.ID.Grass; // Grass cover
+			}
+			else
+			{
+				return Atlas.ID.Air; // Open Air
+			}
 		}
 	}
 
