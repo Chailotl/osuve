@@ -302,16 +302,16 @@ public class World : MonoBehaviour
 	// This is the main world generation function per block
 	public static Atlas.ID GenerateBlock(int x, int y, int z)
 	{
-		// Caves
-		float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
-		caves += PerlinNoise(x, y, z, 30, 8, 0);
-		caves += PerlinNoise(x, y, z, 10, 4, 0);
-
-		// Underground ores
-		float ore = PerlinNoise(x, y, z, 20, 20, 0);
-		
 		if (y <= 0)
 		{
+			// Caves
+			float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
+			caves += PerlinNoise(x, y, z, 30, 8, 0);
+			caves += PerlinNoise(x, y, z, 10, 4, 0);
+
+			// Underground ores
+			float ore = PerlinNoise(x, y, z, 20, 20, 0);
+
 			if (caves > 16)
 			{
 				return Atlas.ID.Air; // Generating caves
@@ -329,6 +329,14 @@ public class World : MonoBehaviour
 		}
 		else
 		{
+			// Caves
+			float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
+			caves += PerlinNoise(x, y, z, 30, 8, 0);
+			caves += PerlinNoise(x, y, z, 10, 4, 0);
+
+			// Underground ores
+			float ore = PerlinNoise(x, y, z, 20, 20, 0);
+
 			// Topology
 			float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
 			//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
