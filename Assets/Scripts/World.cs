@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
+using Priority_Queue;
 
 public class World : MonoBehaviour
 {
 	[SerializeField] private GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
-	private Queue<Chunk> _queue = new Queue<Chunk>();
+	private SimplePriorityQueue<Chunk> _queue = new SimplePriorityQueue<Chunk>();
 	private bool _rendering;
 
 	private static int _chunkSize = 16;
@@ -41,6 +41,11 @@ public class World : MonoBehaviour
 		public bool Equals(Int3 other)
 		{
 			return (this.x == other.x && this.y == other.y && this.z == other.z);
+		}
+
+		public Vector3 Vector()
+		{
+			return new Vector3(this.x, this.y, this.z);
 		}
 	}
 
@@ -141,8 +146,12 @@ public class World : MonoBehaviour
 
 	private void GenerateChunks()
 	{
-        // Iterate through x, y, z
-        for (int x = _playerPos.x - _viewRange; x <= _playerPos.x + _viewRange; ++x)
+		// Which direction is the player pointing in?
+		Vector3 pov = Camera.main.transform.rotation * Vector3.forward;
+		pov.y = 0; // Flatten it as we want it to be horizontal
+
+		// Iterate through x, y, z
+		for (int x = _playerPos.x - _viewRange; x <= _playerPos.x + _viewRange; ++x)
 		{
 			for (int y = _playerPos.y - _viewRange; y <= _playerPos.y + _viewRange; ++y)
 			{
@@ -179,8 +188,13 @@ public class World : MonoBehaviour
 						// Let chunk know its corresponding data chunk and position
 						newChunkScript.LoadData(pos, newDataChunk);
 
+						// Get angle difference between vectors
+						Vector3 dir = pos.Vector() - Camera.main.transform.position;
+
+						float diff = Vector3.Angle(pov, dir);
+
 						// Queue chunk for generation
-						_queue.Enqueue(newChunkScript);
+						_queue.Enqueue(newChunkScript, diff);
 
 						// Store in map
 						_chunks[pos] = newDataChunk;
