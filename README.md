@@ -9,6 +9,6 @@ Open-Source Unity Voxel Engine
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/Rausy/osuve/issues)
 
 # Show me the eye candy!
-Here's a gif of the current state of generation, 1.5 million blocks in under 4 seconds.
+Here's a gif of the current state of generation, 1.5 million blocks in under 3 seconds.
 
-![Gif](https://i.imgur.com/DKUdhIW.gif)
+![Gif](https://i.imgur.com/2wiRTkP.gif)
