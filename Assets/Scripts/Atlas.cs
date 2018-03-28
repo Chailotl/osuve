@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Atlas : MonoBehaviour
 {
-	public enum ID { Air, Stone, Grass, Dirt, Ore, Log, Leaves };
+	public enum ID { Air, Stone, Grass, Dirt, Coal, Log, Leaves };
 
 	public readonly static float tUnit = 0.125f;
 	public enum Dir { Up, Down, North, South, East, West };
@@ -13,7 +13,7 @@ public class Atlas : MonoBehaviour
 	private static Vector2[] _dirt = { new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, 2), new Vector2(1, 3) };
 	private static Vector2[] _grass = { new Vector2(2, 0), new Vector2(2, 1), new Vector2(2, 2) };
 	private static Vector2 _grassSide = new Vector2(2, 3);
-	private static Vector2[] _ore = { new Vector2(3, 0), new Vector2(3, 1), new Vector2(3, 2) };
+	private static Vector2[] _coal = { new Vector2(3, 0), new Vector2(3, 1), new Vector2(3, 2) };
 	private static Vector2[] _log = { new Vector2(4, 0), new Vector2(4, 1) };
 	private static Vector2[] _leaves = { new Vector2(3, 3), new Vector2(4, 3) };
 
@@ -29,7 +29,7 @@ public class Atlas : MonoBehaviour
 				else if (dir == Dir.Down) { return _dirt[rng.Next(_dirt.Length)]; }
 				else { return _grassSide; }
 			case ID.Dirt: return _dirt[rng.Next(_dirt.Length)];
-			case ID.Ore: return _ore[rng.Next(_ore.Length)];
+			case ID.Coal: return _coal[rng.Next(_coal.Length)];
 			case ID.Log: return _log[rng.Next(_log.Length)];
 			case ID.Leaves: return _leaves[rng.Next(_leaves.Length)];
 			default: return new Vector2(0, 0);

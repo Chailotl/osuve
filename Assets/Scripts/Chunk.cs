@@ -15,6 +15,7 @@ public class Chunk : MonoBehaviour
 	private Mesh _mesh;
 	private MeshCollider _col;
 	private bool _updateMesh;
+	private bool _render;
 	private bool _loaded;
 
 	private int _chunkSize;
@@ -35,6 +36,11 @@ public class Chunk : MonoBehaviour
 			_chunkPos = pos;
 			_chunkData = chunkData;
 		}
+	}
+
+	public void SetRender(bool render)
+	{
+		_render = render;
 	}
 
 	void Start()
@@ -59,67 +65,73 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
-	public void GenerateMesh()
+	public void GenerateBlocks()
 	{
 		// Check if data chunk blocks are generated
 		if (!_chunkData.IsGenerated())
 		{
 			_chunkData.GenerateBlocks();
 		}
-		
-		// Iterate through x, y, z
-		for (int x = 0; x < _chunkSize; x++)
+	}
+
+	public void GenerateMesh()
+	{
+		if (_render)
 		{
-			for (int y = 0; y < _chunkSize; y++)
+			// Iterate through x, y, z
+			for (int x = 0; x < _chunkSize; x++)
 			{
-				for (int z = 0; z < _chunkSize; z++)
+				for (int y = 0; y < _chunkSize; y++)
 				{
-					Atlas.ID block = Block(x, y, z);
-
-					// Generate the mesh and texturize
-					if (block != Atlas.ID.Air)
+					for (int z = 0; z < _chunkSize; z++)
 					{
-						if (Block(x, y + 1, z) == Atlas.ID.Air)
-						{
-							CubeUp(x, y, z, block);
-						}
+						Atlas.ID block = Block(x, y, z);
 
-						if (Block(x, y - 1, z) == Atlas.ID.Air)
+						// Generate the mesh and texturize
+						if (block != Atlas.ID.Air)
 						{
-							CubeDown(x, y, z, block);
-						}
+							if (Block(x, y + 1, z) == Atlas.ID.Air)
+							{
+								CubeUp(x, y, z, block);
+							}
 
-						if (Block(x + 1, y, z) == Atlas.ID.Air)
-						{
-							CubeEast(x, y, z, block);
-						}
+							if (Block(x, y - 1, z) == Atlas.ID.Air)
+							{
+								CubeDown(x, y, z, block);
+							}
 
-						if (Block(x - 1, y, z) == Atlas.ID.Air)
-						{
-							CubeWest(x, y, z, block);
-						}
+							if (Block(x + 1, y, z) == Atlas.ID.Air)
+							{
+								CubeEast(x, y, z, block);
+							}
 
-						if (Block(x, y, z + 1) == Atlas.ID.Air)
-						{
-							CubeNorth(x, y, z, block);
-						}
+							if (Block(x - 1, y, z) == Atlas.ID.Air)
+							{
+								CubeWest(x, y, z, block);
+							}
 
-						if (Block(x, y, z - 1) == Atlas.ID.Air)
-						{
-							CubeSouth(x, y, z, block);
+							if (Block(x, y, z + 1) == Atlas.ID.Air)
+							{
+								CubeNorth(x, y, z, block);
+							}
+
+							if (Block(x, y, z - 1) == Atlas.ID.Air)
+							{
+								CubeSouth(x, y, z, block);
+							}
 						}
 					}
 				}
 			}
-		}
 
-		_updateMesh = true;
+			_updateMesh = true;
+		}
 	}
 
 	// Local block to world blocks
 	private Atlas.ID Block(int x, int y, int z)
 	{
-		if (x >= 0 && x <= 15 && y >= 0 && y <= 15 && z >= 0 && z <= 15)
+		if (x >= 0 && x < _chunkSize && y >= 0 && y < _chunkSize && z >= 0 && z < _chunkSize)
 		{
 			// In bounds, we have the data available to us
 			return _chunkData.GetBlock(x, y, z);
@@ -131,8 +143,40 @@ public class Chunk : MonoBehaviour
 		else
 		{
 			// Outside of bounds, need to fetch
-			return World.GenerateBlock(x + _chunkPos.x * _chunkSize, y + _chunkPos.y * _chunkSize, z + _chunkPos.z * _chunkSize);
-			//return World.Block(chunkX, chunkY, chunkZ, x, y, z);
+			World.Int3 pos = _chunkPos;
+
+			if (x == -1)
+			{
+				x = _chunkSize - 1;
+				pos = new World.Int3(_chunkPos.x - 1, _chunkPos.y, _chunkPos.z);
+			}
+			else if (x == _chunkSize)
+			{
+				x = 0;
+				pos = new World.Int3(_chunkPos.x + 1, _chunkPos.y, _chunkPos.z);
+			}
+			else if (y == -1)
+			{
+				y = _chunkSize - 1;
+				pos = new World.Int3(_chunkPos.x, _chunkPos.y - 1, _chunkPos.z);
+			}
+			else if (y == _chunkSize)
+			{
+				y = 0;
+				pos = new World.Int3(_chunkPos.x, _chunkPos.y + 1, _chunkPos.z);
+			}
+			else if (z == -1)
+			{
+				z = _chunkSize - 1;
+				pos = new World.Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z - 1);
+			}
+			else if (z == _chunkSize)
+			{
+				z = 0;
+				pos = new World.Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z + 1);
+			}
+			
+			return World.GetBlock(pos, x, y, z);
 		}
 	}
 

@@ -9,15 +9,42 @@ public class World : MonoBehaviour
 {
 	[SerializeField] private GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
-	private static Dictionary<Int3, DataColumn> _columns = new Dictionary<Int3, DataColumn>();
+	private static Dictionary<Int2, DataColumn> _columns = new Dictionary<Int2, DataColumn>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
-	private SimplePriorityQueue<Chunk> _queue = new SimplePriorityQueue<Chunk>();
+	private SimplePriorityQueue<Chunk> _loadQueue = new SimplePriorityQueue<Chunk>();
+	private Queue<Chunk> _renderQueue = new Queue<Chunk>();
 	private bool _rendering;
 
 	private static int _chunkSize = 16;
 	private static int _viewRange = 3;
 	private static Int3 _playerPos;
-	
+
+	public struct Int2 : IEquatable<Int2>
+	{
+		public int x, z;
+
+		public Int2(int x1, int z1)
+		{
+			x = x1; z = z1;
+		}
+
+		public Int2(Vector3 vec)
+		{
+			x = Mathf.FloorToInt(vec.x);
+			z = Mathf.FloorToInt(vec.z);
+		}
+
+		public override string ToString()
+		{
+			return "(" + x + ", " + z + ")";
+		}
+
+		public bool Equals(Int2 other)
+		{
+			return (this.x == other.x && this.z == other.z);
+		}
+	}
+
 	public struct Int3 : IEquatable<Int3>
 	{
 		public int x, y, z;
@@ -48,6 +75,11 @@ public class World : MonoBehaviour
 		{
 			return new Vector3(this.x, this.y, this.z);
 		}
+
+		public static implicit operator Int2(Int3 str)
+		{
+			return new Int2(str.x, str.z);
+		}
 	}
 
 	public struct DataChunk
@@ -55,6 +87,8 @@ public class World : MonoBehaviour
 		private readonly Int3 _pos;
 		private GameObject _chunk;
 		private Atlas.ID[,,] _blocks;
+		private DataColumn _column;
+
 		private bool _generated;
 		private int _density;
 
@@ -62,7 +96,9 @@ public class World : MonoBehaviour
 		{
 			_pos = pos;
 			_chunk = chunk;
-			_blocks = null;
+			_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
+			_column = _columns[_pos];
+
 			_generated = false;
 			_density = 0;
 		}
@@ -75,25 +111,25 @@ public class World : MonoBehaviour
 				{
 					for (int z = 0; z < _chunkSize; ++z)
 					{
-						Atlas.ID block = GenerateBlock(_pos.x * _chunkSize + x, _pos.y * _chunkSize + y, _pos.z * _chunkSize + z);
+						Atlas.ID block = GenerateBlock(_column, _pos.x * _chunkSize + x, _pos.y * _chunkSize + y, _pos.z * _chunkSize + z);
 
 						// Skip air
 						if (block == Atlas.ID.Air)
 						{
 							continue;
 						}
-
-						// Unnullify
-						if (_blocks == null)
-						{
-
-							_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
-						}
-
 						_blocks[x, y, z] = block;
+
+						++_density;
 					}
 				}
 			}
+			
+			if (_density == 0)
+			{
+				_blocks = null;
+			}
+
 			_generated = true;
 		}
 
@@ -129,14 +165,13 @@ public class World : MonoBehaviour
 
 		public Atlas.ID GetBlock(int x, int y, int z)
 		{
+			// Empty!
 			if (_blocks == null)
 			{
 				return Atlas.ID.Air;
 			}
-			else
-			{
-				return _blocks[x, y, z];
-			}
+
+			return _blocks[x, y, z];
 		}
 
 		public void SetChunk(GameObject chunk)
@@ -149,6 +184,11 @@ public class World : MonoBehaviour
 			return _chunk;
 		}
 
+		public DataColumn GetColumn()
+		{
+			return _column;
+		}
+
 		public bool IsGenerated()
 		{
 			return _generated;
@@ -156,13 +196,49 @@ public class World : MonoBehaviour
 
 		public bool IsEmpty()
 		{
-			return (_blocks == null);
+			return (_density == 0);
 		}
 	}
 
 	public struct DataColumn
 	{
+		private readonly Int2 _pos;
+		private int[,] _surface; // Start of stone layer
+		private int[,] _light; // Highest opaque block
 
+		public DataColumn(Int2 pos)
+		{
+			_pos = pos;
+			_surface = new int[_chunkSize, _chunkSize];
+			_light = new int[_chunkSize, _chunkSize];
+
+			for (int i = 0; i < _chunkSize; ++i)
+			{
+				for (int j = 0; j < _chunkSize; ++j)
+				{
+					_surface[i, j] = GenerateTopology(i + _pos.x * _chunkSize, j + _pos.z * _chunkSize);
+					//_light[i, j] = _surface[i, j] + 3;
+				}
+			}
+		}
+
+		public int GetSurface(int x, int z)
+		{
+			// Query is outside of our array
+			// Assuming world —> local
+			if (x < 0 || x >= _chunkSize || z < 0 || z >= _chunkSize)
+			{
+				x -= _pos.x * _chunkSize;
+				z -= _pos.z * _chunkSize;
+			}
+
+			if (x < 0 || x >= _chunkSize || z < 0 || z >= _chunkSize)
+			{
+				return 0;
+			}
+
+			return _surface[x, z];
+		}
 	}
 
 	void Start()
@@ -191,9 +267,20 @@ public class World : MonoBehaviour
 
 	private void RenderThread()
 	{
-		while (_queue.Count > 0)
+		while (_loadQueue.Count > 0)
 		{
-			Chunk newChunkScript = _queue.Dequeue();
+			Chunk newChunkScript = _loadQueue.Dequeue();
+			_renderQueue.Enqueue(newChunkScript);
+
+			if (newChunkScript != null)
+			{
+				newChunkScript.GenerateBlocks();
+			}
+		}
+
+		while (_renderQueue.Count > 0)
+		{
+			Chunk newChunkScript = _renderQueue.Dequeue();
 
 			if (newChunkScript != null)
 			{
@@ -211,13 +298,28 @@ public class World : MonoBehaviour
 		pov.y = 0; // Flatten it as we want it to be horizontal
 
 		// Iterate through x, y, z
-		for (int x = _playerPos.x - _viewRange; x <= _playerPos.x + _viewRange; ++x)
+		for (int x = _playerPos.x - _viewRange - 1; x <= _playerPos.x + _viewRange + 1; ++x)
 		{
-			for (int y = _playerPos.y - _viewRange; y <= _playerPos.y + _viewRange; ++y)
+			for (int z = _playerPos.z - _viewRange - 1; z <= _playerPos.z + _viewRange + 1; ++z)
 			{
-				for (int z = _playerPos.z - _viewRange; z <= _playerPos.z + _viewRange; ++z)
+				Int2 grid = new Int2(x, z);
+
+				// Does column exist?
+				if (!_columns.ContainsKey(grid))
+				{
+					// Create new data column
+					DataColumn newDataColumn = new DataColumn(grid);
+
+					// Store in map
+					_columns[grid] = newDataColumn;
+				}
+
+				for (int y = _playerPos.y - _viewRange - 1; y <= _playerPos.y + _viewRange + 1; ++y)
 				{
 					Int3 pos = new Int3(x, y, z);
+
+					// Should chunk render yet?
+					bool render = CubeDistance(_playerPos, pos) <= _viewRange;
 
                     // Does chunk exist?
 					if (!_chunks.ContainsKey(pos))
@@ -247,6 +349,7 @@ public class World : MonoBehaviour
 
 						// Let chunk know its corresponding data chunk and position
 						newChunkScript.LoadData(pos, newDataChunk);
+						newChunkScript.SetRender(render);
 
 						// Get angle difference between vectors
 						Vector3 dir = pos.Vector() * _chunkSize - Camera.main.transform.position;
@@ -259,7 +362,7 @@ public class World : MonoBehaviour
 						}
 
 						// Queue chunk for generation
-						_queue.Enqueue(newChunkScript, final);
+						_loadQueue.Enqueue(newChunkScript, final);
 
 						// Store in map
 						_chunks[pos] = newDataChunk;
@@ -269,7 +372,7 @@ public class World : MonoBehaviour
 		}
 
 		// Are there chunks that need generation?
-		if (!_rendering && _queue.Count > 0)
+		if (!_rendering && _loadQueue.Count > 0)
 		{
 			_rendering = true;
 			new Thread(RenderThread).Start();
@@ -309,90 +412,63 @@ public class World : MonoBehaviour
 	}
 
 	// This gets blocks that have already been generated in the past
-	public static Atlas.ID Block(int cx, int cy, int cz, int lx, int ly, int lz)
+	public static Atlas.ID GetBlock(Int3 pos, int x, int y, int z)
 	{
-		Int3 key = new Int3(cx, cy, cz);
-
-		if (!_chunks.ContainsKey(key))
-		{
-			return GenerateBlock(cx + lx, cy + ly, cz + lz);
-		}
-		else
-		{
-			return _chunks[key].GetBlock(lx, ly, lz);
-		}
+		return _chunks[pos].GetBlock(x, y, z);
 	}
 
 	// This is the main world generation function per block
-	public static Atlas.ID GenerateBlock(int x, int y, int z)
+	public static Atlas.ID GenerateBlock(DataColumn column, int x, int y, int z)
 	{
-		if (y <= 0)
+		// Topology
+		float stone = column.GetSurface(x, z);
+		float dirt = 3;
+		
+		if (y <= stone)
 		{
 			// Caves
 			float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
 			caves += PerlinNoise(x, y, z, 30, 8, 0);
 			caves += PerlinNoise(x, y, z, 10, 4, 0);
-
-			// Underground ores
-			float ore = PerlinNoise(x, y, z, 20, 20, 0);
-
+			
 			if (caves > 16)
 			{
 				return Atlas.ID.Air; // Generating caves
 			}
-			else if (ore > 18)
+
+			// Underground ores
+			float coal = PerlinNoise(x, y, z, 20, 20, 0);
+
+			if (coal > 18)
 			{
-				return Atlas.ID.Ore;
+				return Atlas.ID.Coal;
 			}
 
 			return Atlas.ID.Stone; // Stone layer
 		}
-		else if (y > 7) // Atmosphere
+		else if (y <= stone + dirt)
 		{
-			return Atlas.ID.Air;
+			return Atlas.ID.Dirt; // Dirt cover
+		}
+		else if (y <= stone + dirt + 1)
+		{
+			return Atlas.ID.Grass; // Grass cover
 		}
 		else
 		{
-			// Topology
-			float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
-			//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
-			//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
-			float dirt = 3;
-
-			if (y <= stone)
-			{
-				// Caves
-				float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
-				caves += PerlinNoise(x, y, z, 30, 8, 0);
-				caves += PerlinNoise(x, y, z, 10, 4, 0);
-
-				// Underground ores
-				float ore = PerlinNoise(x, y, z, 20, 20, 0);
-
-				if (caves > 16)
-				{
-					return Atlas.ID.Air; // Generating caves
-				}
-				else if (ore > 18)
-				{
-					return Atlas.ID.Ore;
-				}
-
-				return Atlas.ID.Stone; // Stone layer
-			}
-			else if (y <= stone + dirt)
-			{
-				return Atlas.ID.Dirt; // Dirt cover
-			}
-			else if (y <= stone + dirt + 1)
-			{
-				return Atlas.ID.Grass; // Grass cover
-			}
-			else
-			{
-				return Atlas.ID.Air; // Open Air
-			}
+			return Atlas.ID.Air; // Open Air
 		}
+	}
+
+	public static int GenerateTopology(int x, int z)
+	{
+		// Topology
+		float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
+		//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
+		//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
+		//float dirt = 3;
+
+		return (int) stone;
 	}
 
 	public static float PerlinNoise(float x, float y, float z, float scale, float height, float power)
