@@ -9,6 +9,7 @@ public class World : MonoBehaviour
 {
 	[SerializeField] private GameObject chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
+	private static Dictionary<Int3, DataColumn> _columns = new Dictionary<Int3, DataColumn>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
 	private SimplePriorityQueue<Chunk> _queue = new SimplePriorityQueue<Chunk>();
 	private bool _rendering;
@@ -55,6 +56,7 @@ public class World : MonoBehaviour
 		private GameObject _chunk;
 		private Atlas.ID[,,] _blocks;
 		private bool _generated;
+		private int _density;
 
 		public DataChunk(Int3 pos, GameObject chunk)
 		{
@@ -62,6 +64,7 @@ public class World : MonoBehaviour
 			_chunk = chunk;
 			_blocks = null;
 			_generated = false;
+			_density = 0;
 		}
 
 		public void GenerateBlocks()
@@ -96,16 +99,32 @@ public class World : MonoBehaviour
 
 		public void SetBlock(Atlas.ID block, int x, int y, int z)
 		{
+			// Do not give us air!
+			if (block == Atlas.ID.Air) { return; }
+			
 			// Unnullify
 			if (_blocks == null)
 			{
-				
 				_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
 			}
 
 			_blocks[x, y, z] = block;
 
-			// Do checks for nullification?
+			++_density;
+		}
+
+		public void RemoveBlock(int x, int y, int z)
+		{
+			// Already empty!
+			if (_blocks == null || _blocks[x, y, z] == Atlas.ID.Air) { return; }
+
+			_blocks[x, y, z] = Atlas.ID.Air;
+
+			// Check for nullification
+			if (--_density == 0)
+			{
+				_blocks = null;
+			}
 		}
 
 		public Atlas.ID GetBlock(int x, int y, int z)
@@ -139,6 +158,11 @@ public class World : MonoBehaviour
 		{
 			return (_blocks == null);
 		}
+	}
+
+	public struct DataColumn
+	{
+
 	}
 
 	void Start()
@@ -329,14 +353,6 @@ public class World : MonoBehaviour
 		}
 		else
 		{
-			// Caves
-			float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
-			caves += PerlinNoise(x, y, z, 30, 8, 0);
-			caves += PerlinNoise(x, y, z, 10, 4, 0);
-
-			// Underground ores
-			float ore = PerlinNoise(x, y, z, 20, 20, 0);
-
 			// Topology
 			float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
 			//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
@@ -345,6 +361,14 @@ public class World : MonoBehaviour
 
 			if (y <= stone)
 			{
+				// Caves
+				float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
+				caves += PerlinNoise(x, y, z, 30, 8, 0);
+				caves += PerlinNoise(x, y, z, 10, 4, 0);
+
+				// Underground ores
+				float ore = PerlinNoise(x, y, z, 20, 20, 0);
+
 				if (caves > 16)
 				{
 					return Atlas.ID.Air; // Generating caves
