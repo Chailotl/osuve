@@ -11,4 +11,4 @@ Open-Source Unity Voxel Engine
 # Show me the eye candy!
 Here's a gif of the current state of generation, 1.5 million blocks in under 3 seconds.
 
-![Gif](https://i.imgur.com/2wiRTkP.gifv)
+![Gif](https://i.imgur.com/2wiRTkP.gif)
