@@ -274,9 +274,13 @@ public class World : MonoBehaviour
 
 			return Atlas.ID.Stone; // Stone layer
 		}
-		else if (y <= dirt + stone)
+		else if (y <= stone + dirt)
 		{
-			return Atlas.ID.Grass; // Dirt cover
+			return Atlas.ID.Dirt; // Dirt cover
+		}
+		else if (y <= stone + dirt + 1)
+		{
+			return Atlas.ID.Grass; // Grass cover
 		}
 		else
 		{
