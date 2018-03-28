@@ -60,7 +60,7 @@ public class World : MonoBehaviour
 		{
 			_pos = pos;
 			_chunk = chunk;
-			_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
+			_blocks = null;
 			_generated = false;
 		}
 
@@ -72,7 +72,22 @@ public class World : MonoBehaviour
 				{
 					for (int z = 0; z < _chunkSize; ++z)
 					{
-						_blocks[x, y, z] = GenerateBlock(_pos.x * _chunkSize + x, _pos.y * _chunkSize + y, _pos.z * _chunkSize + z);
+						Atlas.ID block = GenerateBlock(_pos.x * _chunkSize + x, _pos.y * _chunkSize + y, _pos.z * _chunkSize + z);
+
+						// Skip air
+						if (block == Atlas.ID.Air)
+						{
+							continue;
+						}
+
+						// Unnullify
+						if (_blocks == null)
+						{
+
+							_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
+						}
+
+						_blocks[x, y, z] = block;
 					}
 				}
 			}
@@ -81,12 +96,28 @@ public class World : MonoBehaviour
 
 		public void SetBlock(Atlas.ID block, int x, int y, int z)
 		{
+			// Unnullify
+			if (_blocks == null)
+			{
+				
+				_blocks = new Atlas.ID[_chunkSize, _chunkSize, _chunkSize];
+			}
+
 			_blocks[x, y, z] = block;
+
+			// Do checks for nullification?
 		}
 
 		public Atlas.ID GetBlock(int x, int y, int z)
 		{
-			return _blocks[x, y, z];
+			if (_blocks == null)
+			{
+				return Atlas.ID.Air;
+			}
+			else
+			{
+				return _blocks[x, y, z];
+			}
 		}
 
 		public void SetChunk(GameObject chunk)
@@ -102,6 +133,11 @@ public class World : MonoBehaviour
 		public bool IsGenerated()
 		{
 			return _generated;
+		}
+
+		public bool IsEmpty()
+		{
+			return (_blocks == null);
 		}
 	}
 
