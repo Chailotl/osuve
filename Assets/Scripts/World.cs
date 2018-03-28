@@ -189,12 +189,17 @@ public class World : MonoBehaviour
 						newChunkScript.LoadData(pos, newDataChunk);
 
 						// Get angle difference between vectors
-						Vector3 dir = pos.Vector() - Camera.main.transform.position;
-
+						Vector3 dir = pos.Vector() * _chunkSize - Camera.main.transform.position;
+						float dist = dir.magnitude;
 						float diff = Vector3.Angle(pov, dir);
+						float final = dist + diff;
+						if (dist < _chunkSize * 2f) // Prioritize chunks immediately closest
+						{
+							final = dist;
+						}
 
 						// Queue chunk for generation
-						_queue.Enqueue(newChunkScript, diff);
+						_queue.Enqueue(newChunkScript, final);
 
 						// Store in map
 						_chunks[pos] = newDataChunk;
