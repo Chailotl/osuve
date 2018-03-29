@@ -6,10 +6,13 @@ Open-Source Unity Voxel Engine
 [![GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/Rausy/osuve/issues)
 
+This engine is in early alpha, expect things to break, if they're not already broken!
+
 # Show me the eye candy!
 Here's a gif of the current state of the engine; generating 3 million blocks in 4 seconds, rendering 1.5 million blocks in 1.5 seconds.
 
 ![Gif](https://i.imgur.com/F6fYUcR.gif)
+![Image](https://i.imgur.com/ynjliMS.png)
 
 # Credits
 [Pixel Perfection](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/resource-packs/1242533) by XSSheep
