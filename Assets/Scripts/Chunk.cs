@@ -187,8 +187,8 @@ public class Chunk : MonoBehaviour
 		_mesh.vertices = _newVerts.ToArray();
 		_mesh.uv = _newUV.ToArray();
 		_mesh.triangles = _newTris.ToArray();
-		_mesh.RecalculateNormals();
 		_mesh.colors = _newColors.ToArray();
+		_mesh.RecalculateNormals();
 
 		_col.sharedMesh = null;
 		_col.sharedMesh = _mesh;
@@ -196,6 +196,7 @@ public class Chunk : MonoBehaviour
 		_newVerts.Clear();
 		_newUV.Clear();
 		_newTris.Clear();
+		_newColors.Clear();
 
 		_faceCount = 0;
 	}
@@ -211,7 +212,10 @@ public class Chunk : MonoBehaviour
 
 		if (block == Atlas.ID.Grass)
 		{
-			color = new Color(82f/255f*2f, 149f/255f*2f, 47f/255f*2f);
+			color = new Color(82f/255f, 149f/255f, 47f/255f);
+
+			// Multiplier that most Unity shaders seem to use to brighten
+			color *= 2f;
 		}
 
 		_newColors.Add(color);
