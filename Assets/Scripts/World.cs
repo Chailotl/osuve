@@ -464,7 +464,16 @@ public class World : MonoBehaviour
 	{
 		// Topology
 		float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
-		//stone += PerlinNoise(x, 300, z, 20, 4, 0) + 10; // Stone goes up to y=10
+		stone += PerlinNoise(x, 300, z, 20, 4, 1f);
+		stone += PerlinNoise(x, 500, z, 100, 20, 1f);
+
+		// "Plateues"
+		if (PerlinNoise(x, 100, z, 100, 10, 1f) >= 9f)
+		{
+			stone += 10;
+		}
+
+		stone += Mathf.Clamp(PerlinNoise(x, 0, z, 50, 10, 5f), 0, 10); // Craters?
 		//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
 		//float dirt = 3;
 
