@@ -7,7 +7,7 @@ using Priority_Queue;
 
 public class World : MonoBehaviour
 {
-	[SerializeField] private GameObject chunkPrefab;
+	[SerializeField] private GameObject _chunkPrefab;
 	private static Dictionary<Int3, DataChunk> _chunks = new Dictionary<Int3, DataChunk>();
 	private static Dictionary<Int2, DataColumn> _columns = new Dictionary<Int2, DataColumn>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
@@ -15,8 +15,9 @@ public class World : MonoBehaviour
 	private Queue<Chunk> _renderQueue = new Queue<Chunk>();
 	private bool _rendering;
 
-	private static int _chunkSize = 16;
-	private static int _viewRange = 3;
+	[SerializeField] private static int _chunkSize = 16;
+	[SerializeField] private static int _viewRangeHorizontal = 3;
+	[SerializeField] private static int _viewRangeVertical = 3;
 	private static Int3 _playerPos;
 
 	public struct Int2 : IEquatable<Int2>
@@ -298,9 +299,9 @@ public class World : MonoBehaviour
 		pov.y = 0; // Flatten it as we want it to be horizontal
 
 		// Iterate through x, y, z
-		for (int x = _playerPos.x - _viewRange - 1; x <= _playerPos.x + _viewRange + 1; ++x)
+		for (int x = _playerPos.x - _viewRangeHorizontal - 1; x <= _playerPos.x + _viewRangeHorizontal + 1; ++x)
 		{
-			for (int z = _playerPos.z - _viewRange - 1; z <= _playerPos.z + _viewRange + 1; ++z)
+			for (int z = _playerPos.z - _viewRangeHorizontal - 1; z <= _playerPos.z + _viewRangeHorizontal + 1; ++z)
 			{
 				Int2 grid = new Int2(x, z);
 
@@ -314,18 +315,15 @@ public class World : MonoBehaviour
 					_columns[grid] = newDataColumn;
 				}
 
-				for (int y = _playerPos.y - _viewRange - 1; y <= _playerPos.y + _viewRange + 1; ++y)
+				for (int y = _playerPos.y - _viewRangeVertical - 1; y <= _playerPos.y + _viewRangeVertical + 1; ++y)
 				{
 					Int3 pos = new Int3(x, y, z);
-
-					// Should chunk render yet?
-					bool render = CubeDistance(_playerPos, pos) <= _viewRange;
-
+					
                     // Does chunk exist?
 					if (!_chunks.ContainsKey(pos))
 					{
 						// Create new chunk and get corresponding script
-						GameObject newChunk = Instantiate(chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
+						GameObject newChunk = Instantiate(_chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
 						Chunk newChunkScript = newChunk.GetComponent<Chunk>();
 
 						DataChunk newDataChunk;
@@ -349,7 +347,9 @@ public class World : MonoBehaviour
 
 						// Let chunk know its corresponding data chunk and position
 						newChunkScript.LoadData(pos, newDataChunk);
-						newChunkScript.SetRender(render);
+
+						// Should chunk render yet?
+						newChunkScript.SetRender(CubeDistance(_playerPos, pos) <= _viewRangeHorizontal);
 
 						// Get angle difference between vectors
 						Vector3 dir = pos.Vector() * _chunkSize - Camera.main.transform.position;
@@ -384,15 +384,40 @@ public class World : MonoBehaviour
 		List<Int3> temp = new List<Int3>();
 
         // Collect all chunks that need to be deleted
-		foreach (KeyValuePair<Int3, DataChunk> chunk in _chunks)
+		foreach (KeyValuePair<Int3, DataChunk> pair in _chunks)
 		{
-			if (CubeDistance(chunk.Key, _playerPos) > _viewRange)
+			if (CubeDistance(pair.Key, _playerPos) > _viewRangeHorizontal + 1)
 			{
-				temp.Add(chunk.Key);
+				temp.Add(pair.Key);
+			}
+			else
+			{
+				// Get chunk
+				GameObject chunk = pair.Value.GetChunk();
+				
+				//Retrieve chunk script
+				Chunk chunkScript = chunk.GetComponent<Chunk>();
+
+				// Make only hidden chunks render!
+				if (chunkScript.GetRender())
+				{
+					// Should chunk render yet?
+					chunkScript.SetRender(CubeDistance(_playerPos, pair.Key) <= _viewRangeHorizontal);
+
+					// Queue chunk for generation
+					_loadQueue.Enqueue(chunkScript, 0);
+				}
 			}
 		}
 
-        // Destroy chunk
+		// Are there chunks that need generation?
+		if (!_rendering && _loadQueue.Count > 0)
+		{
+			_rendering = true;
+			new Thread(RenderThread).Start();
+		}
+
+		// Destroy chunk
 		foreach (Int3 key in temp)
 		{
 			DestroyChunk(key);
@@ -402,7 +427,7 @@ public class World : MonoBehaviour
 	private void DestroyChunk(Int3 pos)
 	{
 		Destroy(_chunks[pos].GetChunk()); // Delete corresponding gameobject
-		_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
+		//_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
 		_chunks.Remove(pos); // Remove chunk from main list
 	}
 
@@ -501,6 +526,6 @@ public class World : MonoBehaviour
 
 	public static int GetViewRange()
 	{
-		return _viewRange;
+		return _viewRangeHorizontal;
 	}
 }

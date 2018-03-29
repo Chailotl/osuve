@@ -44,6 +44,11 @@ public class Chunk : MonoBehaviour
 		_render = render;
 	}
 
+	public bool GetRender()
+	{
+		return _render;
+	}
+
 	void Start()
 	{
 		_mesh = GetComponent<MeshFilter>().mesh;
