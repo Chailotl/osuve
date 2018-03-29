@@ -212,7 +212,7 @@ public class Chunk : MonoBehaviour
 
 		if (block == Atlas.ID.Grass)
 		{
-			color = new Color(82f/255f, 149f/255f, 47f/255f);
+			color = Atlas.Colors["Normal_1"];
 
 			// Multiplier that most Unity shaders seem to use to brighten
 			color *= 2f;
