@@ -10,6 +10,7 @@ public class Chunk : MonoBehaviour
 	private List<Vector3> _newVerts = new List<Vector3>();
 	private List<int> _newTris = new List<int>();
 	private List<Vector2> _newUV = new List<Vector2>();
+	private List<Color> _newColors = new List<Color>();
 	private int _faceCount;
 
 	private Mesh _mesh;
@@ -187,6 +188,7 @@ public class Chunk : MonoBehaviour
 		_mesh.uv = _newUV.ToArray();
 		_mesh.triangles = _newTris.ToArray();
 		_mesh.RecalculateNormals();
+		_mesh.colors = _newColors.ToArray();
 
 		_col.sharedMesh = null;
 		_col.sharedMesh = _mesh;
@@ -205,6 +207,18 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y, z));
 		_newVerts.Add(new Vector3(x, y, z));
 
+		Color color = Color.white;
+
+		if (block == Atlas.ID.Grass)
+		{
+			color = new Color(82f/255f*2f, 149f/255f*2f, 47f/255f*2f);
+		}
+
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.Up);
 
 		Cube(texturePos);
@@ -216,6 +230,11 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y - 1, z));
 		_newVerts.Add(new Vector3(x + 1, y - 1, z + 1));
 		_newVerts.Add(new Vector3(x, y - 1, z + 1));
+
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
 
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.Down);
 
@@ -229,6 +248,11 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x, y, z + 1));
 		_newVerts.Add(new Vector3(x, y - 1, z + 1));
 
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.North);
 
 		Cube(texturePos);
@@ -240,6 +264,11 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x, y, z));
 		_newVerts.Add(new Vector3(x + 1, y, z));
 		_newVerts.Add(new Vector3(x + 1, y - 1, z));
+
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
 
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.South);
 
@@ -253,6 +282,11 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y, z + 1));
 		_newVerts.Add(new Vector3(x + 1, y - 1, z + 1));
 
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.East);
 
 		Cube(texturePos);
@@ -264,6 +298,11 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x, y, z + 1));
 		_newVerts.Add(new Vector3(x, y, z));
 		_newVerts.Add(new Vector3(x, y - 1, z));
+
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
+		_newColors.Add(Color.white);
 
 		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.West);
 
