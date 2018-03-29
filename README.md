@@ -11,8 +11,10 @@ This engine is in early alpha, expect things to break, if they're not already br
 # Show me the eye candy!
 Here's a gif of the current state of the engine; generating 3 million blocks in 4 seconds, rendering 1.5 million blocks in 1.5 seconds.
 
-![Gif](https://i.imgur.com/F6fYUcR.gif)
-![Image](https://i.imgur.com/ynjliMS.png)
+![Generation](https://i.imgur.com/F6fYUcR.gif)
+![Caves](https://i.imgur.com/Q8qWiBt.png)
+![Surface](https://i.imgur.com/ICeR5Or.png)
+![Surface](https://i.imgur.com/ynjliMS.png)
 
 # Credits
 [Pixel Perfection](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/resource-packs/1242533) by XSSheep
