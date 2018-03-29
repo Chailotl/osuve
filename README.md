@@ -13,6 +13,9 @@ Here's a gif of the current state of the engine; generating 3 million blocks in 
 
 # Credits
 [Pixel Perfection](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/resource-packs/1242533) by XSSheep
+
 [High Speed Priority Queue for C#](https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp) by BlueRaja
+
 [UnityVertexColors](https://github.com/H-man/UnityVertexColors) by Henri Kähkönen
+
 [KinoFog](https://github.com/keijiro/KinoFog) by Keijiro Takahashi
