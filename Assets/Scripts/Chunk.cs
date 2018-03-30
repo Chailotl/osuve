@@ -213,14 +213,12 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y, z));
 		_newVerts.Add(new Vector3(x, y, z));
 
+		Atlas.Dir dir = Atlas.Dir.Up;
 		Color color = Color.white;
 
 		if (block == Atlas.ID.Grass)
 		{
-			color = Atlas.Colors["Normal_1"];
-
-			// Multiplier that most Unity shaders seem to use to brighten
-			color *= 2f;
+			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
 		}
 
 		_newColors.Add(color);
@@ -228,7 +226,7 @@ public class Chunk : MonoBehaviour
 		_newColors.Add(color);
 		_newColors.Add(color);
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.Up);
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
@@ -240,12 +238,15 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y - 1, z + 1));
 		_newVerts.Add(new Vector3(x, y - 1, z + 1));
 
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
+		Atlas.Dir dir = Atlas.Dir.Down;
+		Color color = Color.white;
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.Down);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
@@ -257,12 +258,21 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x, y, z + 1));
 		_newVerts.Add(new Vector3(x, y - 1, z + 1));
 
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
+		Atlas.Dir dir = Atlas.Dir.North;
+		Color color = Color.white;
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.North);
+		if (block == Atlas.ID.Grass && Block(x, y - 1, z + 1) == Atlas.ID.Grass)
+		{
+			dir = Atlas.Dir.Up;
+			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
+		}
+
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
@@ -274,12 +284,21 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y, z));
 		_newVerts.Add(new Vector3(x + 1, y - 1, z));
 
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
+		Atlas.Dir dir = Atlas.Dir.South;
+		Color color = Color.white;
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.South);
+		if (block == Atlas.ID.Grass && Block(x, y - 1, z - 1) == Atlas.ID.Grass)
+		{
+			dir = Atlas.Dir.Up;
+			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
+		}
+
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
@@ -291,12 +310,21 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x + 1, y, z + 1));
 		_newVerts.Add(new Vector3(x + 1, y - 1, z + 1));
 
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
+		Atlas.Dir dir = Atlas.Dir.East;
+		Color color = Color.white;
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.East);
+		if (block == Atlas.ID.Grass && Block(x + 1, y - 1, z) == Atlas.ID.Grass)
+		{
+			dir = Atlas.Dir.Up;
+			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
+		}
+
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
@@ -308,12 +336,21 @@ public class Chunk : MonoBehaviour
 		_newVerts.Add(new Vector3(x, y, z));
 		_newVerts.Add(new Vector3(x, y - 1, z));
 
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
-		_newColors.Add(Color.white);
+		Atlas.Dir dir = Atlas.Dir.West;
+		Color color = Color.white;
+		
+		if (block == Atlas.ID.Grass && Block(x - 1, y - 1, z) == Atlas.ID.Grass)
+		{
+			dir = Atlas.Dir.Up;
+			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
+		}
 
-		Vector2 texturePos = Atlas.GetTexture(block, Atlas.Dir.West);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+		_newColors.Add(color);
+
+		Vector2 texturePos = Atlas.GetTexture(block, dir);
 
 		Cube(texturePos);
 	}
