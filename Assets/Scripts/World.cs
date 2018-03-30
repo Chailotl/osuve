@@ -20,18 +20,17 @@ public class World : MonoBehaviour
 	[SerializeField] private static int _viewRangeVertical = 3;
 	private static Int3 _playerPos;
 
-
-	public struct DataChunk
+	public class DataChunk
 	{
 		private readonly Int3 _pos;
-		private GameObject _chunk;
+		private Chunk _chunk;
 		private Atlas.ID[,,] _blocks;
 		private DataColumn _column;
 
 		private bool _generated;
 		private int _density;
 
-		public DataChunk(Int3 pos, GameObject chunk)
+		public DataChunk(Int3 pos, Chunk chunk)
 		{
 			_pos = pos;
 			_chunk = chunk;
@@ -113,12 +112,12 @@ public class World : MonoBehaviour
 			return _blocks[x, y, z];
 		}
 
-		public void SetChunk(GameObject chunk)
+		public void SetChunk(Chunk chunk)
 		{
 			_chunk = chunk;
 		}
 
-		public GameObject GetChunk()
+		public Chunk GetChunk()
 		{
 			return _chunk;
 		}
@@ -272,7 +271,7 @@ public class World : MonoBehaviour
 							newDataChunk = _offloadChunks[pos];
 
 							// Give data chunk gameobject
-							newDataChunk.SetChunk(newChunk);
+							newDataChunk.SetChunk(newChunkScript);
 
 							// Remove from offload
 							_offloadChunks.Remove(pos);
@@ -280,7 +279,7 @@ public class World : MonoBehaviour
 						else
 						{
 							// Create new data chunk
-							newDataChunk = new DataChunk(pos, newChunk);
+							newDataChunk = new DataChunk(pos, newChunkScript);
 						}
 
 						// Let chunk know its corresponding data chunk and position
@@ -331,10 +330,7 @@ public class World : MonoBehaviour
 			else
 			{
 				// Get chunk
-				GameObject chunk = pair.Value.GetChunk();
-				
-				//Retrieve chunk script
-				Chunk chunkScript = chunk.GetComponent<Chunk>();
+				Chunk chunkScript = pair.Value.GetChunk();
 
 				// Make only hidden chunks render!
 				if (chunkScript.GetRender())
@@ -465,5 +461,17 @@ public class World : MonoBehaviour
 	public static int GetViewRange()
 	{
 		return _viewRangeHorizontal;
+	}
+
+	public static DataChunk GetChunk(Int3 pos)
+	{
+		if (_chunks.ContainsKey(pos))
+		{
+			return _chunks[pos];
+		}
+		else
+		{
+			return null;
+		}
 	}
 }
