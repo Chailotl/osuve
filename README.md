@@ -8,7 +8,7 @@
 
 **This game engine is in early alpha, expect things to break, if they're not already broken!**
 
-OSUVE is my take on a voxel engine, made open-source to the world ~~to put to shame all paid voxel engines~~ so that others may benefit from the knowledge that is accumulated here, and perhaps contribute some of their own. The main difference from this and [Minetest](https://github.com/minetest/minetest) is that the former is a C# Unity game engine, unlike the latter as a C++ game engine.
+OSUVE is my take on a voxel engine, made open-source to the world ~~to put to shame all paid voxel engines~~ so that others may benefit from the knowledge that is accumulated here, and perhaps contribute some of their own. I will be continually working on this until it becomes a working product. (After all, I have planes to make a game with it!)
 
 ## Show me the eye candy! :candy:
 
