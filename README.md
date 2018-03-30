@@ -24,7 +24,7 @@ Lucky for you, all you need to get this up and running is the latest copy of Uni
 
 ## License :lock_with_ink_pen:
 
-This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
+This project is licensed under the GPL-3.0 License - see the [LICENSE](https://github.com/Rausy/osuve/blob/master/LICENSE) file for details.
 
 This may change in the future.
 
