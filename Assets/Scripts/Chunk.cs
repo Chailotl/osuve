@@ -20,13 +20,13 @@ public class Chunk : MonoBehaviour
 	private bool _loaded;
 
 	private int _chunkSize;
-	private World.Int3 _chunkPos;
+	private Int3 _chunkPos;
 	private World.DataChunk _chunkData;
 
 	public bool isolateMesh;
 	private bool _updateIso;
 
-	public void LoadData(World.Int3 pos, World.DataChunk chunkData)
+	public void LoadData(Int3 pos, World.DataChunk chunkData)
 	{
 		// One-time only!
 		if (!_loaded)
@@ -149,37 +149,37 @@ public class Chunk : MonoBehaviour
 		else
 		{
 			// Outside of bounds, need to fetch
-			World.Int3 pos = _chunkPos;
+			Int3 pos = _chunkPos;
 
 			if (x == -1)
 			{
 				x = _chunkSize - 1;
-				pos = new World.Int3(_chunkPos.x - 1, _chunkPos.y, _chunkPos.z);
+				pos = new Int3(_chunkPos.x - 1, _chunkPos.y, _chunkPos.z);
 			}
 			else if (x == _chunkSize)
 			{
 				x = 0;
-				pos = new World.Int3(_chunkPos.x + 1, _chunkPos.y, _chunkPos.z);
+				pos = new Int3(_chunkPos.x + 1, _chunkPos.y, _chunkPos.z);
 			}
 			else if (y == -1)
 			{
 				y = _chunkSize - 1;
-				pos = new World.Int3(_chunkPos.x, _chunkPos.y - 1, _chunkPos.z);
+				pos = new Int3(_chunkPos.x, _chunkPos.y - 1, _chunkPos.z);
 			}
 			else if (y == _chunkSize)
 			{
 				y = 0;
-				pos = new World.Int3(_chunkPos.x, _chunkPos.y + 1, _chunkPos.z);
+				pos = new Int3(_chunkPos.x, _chunkPos.y + 1, _chunkPos.z);
 			}
 			else if (z == -1)
 			{
 				z = _chunkSize - 1;
-				pos = new World.Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z - 1);
+				pos = new Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z - 1);
 			}
 			else if (z == _chunkSize)
 			{
 				z = 0;
-				pos = new World.Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z + 1);
+				pos = new Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z + 1);
 			}
 			
 			return World.GetBlock(pos, x, y, z);
