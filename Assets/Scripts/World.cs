@@ -12,7 +12,6 @@ public class World : MonoBehaviour
 	private static Dictionary<Int2, DataColumn> _columns = new Dictionary<Int2, DataColumn>();
 	private static Dictionary<Int3, DataChunk> _offloadChunks = new Dictionary<Int3, DataChunk>();
 	private SimplePriorityQueue<Chunk> _loadQueue = new SimplePriorityQueue<Chunk>();
-	private Queue<Chunk> _renderQueue = new Queue<Chunk>();
 	private bool _rendering;
 
 	[SerializeField] private static int _chunkSize = 16;
@@ -208,21 +207,18 @@ public class World : MonoBehaviour
 		while (_loadQueue.Count > 0)
 		{
 			Chunk newChunkScript = _loadQueue.Dequeue();
-			_renderQueue.Enqueue(newChunkScript);
 
 			if (newChunkScript != null)
 			{
-				newChunkScript.GenerateBlocks();
-			}
-		}
-
-		while (_renderQueue.Count > 0)
-		{
-			Chunk newChunkScript = _renderQueue.Dequeue();
-
-			if (newChunkScript != null)
-			{
-				newChunkScript.GenerateMesh();
+				Debug.Log("Rendering next chunk");
+				try
+				{
+					newChunkScript.GenerateBlocks();
+				}
+				catch(Exception ex)
+				{
+					Debug.LogException(ex);
+				}
 			}
 		}
 
