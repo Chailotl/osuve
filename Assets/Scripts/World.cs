@@ -253,7 +253,7 @@ public class World : MonoBehaviour
 					Int3 pos = new Int3(x, y, z);
 					
                     // Does chunk exist?
-					if (!_chunks.ContainsKey(pos))
+					if (!_chunks.ContainsKey(pos) && Distance(pos, _playerPos) <= _viewRangeHorizontal)
 					{
 						// Create new chunk and get corresponding script
 						GameObject newChunk = Instantiate(_chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
