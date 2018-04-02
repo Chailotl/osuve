@@ -18,6 +18,7 @@ These images are likely to be outdated due to the current fast pace of changes.
 ![Caves](https://i.imgur.com/Q8qWiBt.png)
 ![Surface](https://i.imgur.com/ICeR5Or.png)
 ![Surface](https://i.imgur.com/ynjliMS.png)
+![CTM](https://i.imgur.com/t6c4Ue8.png)
 
 ## Getting Started :fast_forward:
 
