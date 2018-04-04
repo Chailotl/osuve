@@ -459,16 +459,22 @@ public class World : MonoBehaviour
 		return _viewRangeHorizontal;
 	}
 
-	public static DataChunk GetChunk(Int3 pos)
+	public static DataChunk GetChunk(Int3 chunkPos)
 	{
-		if (_chunks.ContainsKey(pos))
+		DataChunk chunk;
+		_chunks.TryGetValue(chunkPos, out chunk);
+		return chunk;
+
+		// Above is slightly faster, but not meaningfully
+		/*if (_chunks.ContainsKey(pos))
 		{
 			return _chunks[pos];
 		}
 		else
 		{
 			return null;
-		}
+		}*/
+	}
 	
 	// This gives the chunk that the world block resides in
 	public static Int3 WhichChunk(Int3 blockPos)
