@@ -4,11 +4,11 @@ using UnityEngine;
 
 public struct DataColumn
 {
-	private readonly Int2 _pos;
+	private readonly Vector2Int _pos;
 	private int[,] _surface; // Start of stone layer
 	//private int[,] _light; // Highest opaque block
 
-	public DataColumn(Int2 pos)
+	public DataColumn(Vector2Int pos)
 	{
 		_pos = pos;
 		_surface = new int[World.GetChunkSize(), World.GetChunkSize()];
@@ -18,7 +18,7 @@ public struct DataColumn
 		{
 			for (int j = 0; j < World.GetChunkSize(); ++j)
 			{
-				_surface[i, j] = World.GenerateTopology(i + _pos.x * World.GetChunkSize(), j + _pos.z * World.GetChunkSize());
+				_surface[i, j] = World.GenerateTopology(i + _pos.x * World.GetChunkSize(), j + _pos.y * World.GetChunkSize());
 				//_light[i, j] = _surface[i, j] + 3;
 			}
 		}
@@ -31,7 +31,7 @@ public struct DataColumn
 		if (x < 0 || x >= World.GetChunkSize() || z < 0 || z >= World.GetChunkSize())
 		{
 			x -= _pos.x * World.GetChunkSize();
-			z -= _pos.z * World.GetChunkSize();
+			z -= _pos.y * World.GetChunkSize();
 		}
 
 		if (x < 0 || x >= World.GetChunkSize() || z < 0 || z >= World.GetChunkSize())
