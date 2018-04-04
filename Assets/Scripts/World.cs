@@ -469,5 +469,24 @@ public class World : MonoBehaviour
 		{
 			return null;
 		}
+	
+	// This gives the chunk that the world block resides in
+	public static Int3 WhichChunk(Int3 blockPos)
+	{
+		int x = (int) Mathf.Floor(blockPos.x / (float) _chunkSize);
+		int y = (int) Mathf.Floor(blockPos.y / (float) _chunkSize);
+		int z = (int) Mathf.Floor(blockPos.z / (float) _chunkSize);
+
+		return new Int3(x, y, z);
+	}
+
+	// This clamps the world block to a local block
+	public static Int3 ClampBlock(Int3 blockPos)
+	{
+		int x = blockPos.x % _chunkSize;
+		int y = blockPos.y % _chunkSize;
+		int z = blockPos.z % _chunkSize;
+
+		return new Int3(x, y, z);
 	}
 }
