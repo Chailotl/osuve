@@ -15,8 +15,8 @@ public class World : MonoBehaviour
 	private bool _rendering;
 
 	[SerializeField] private static int _chunkSize = 16;
-	[SerializeField] private static int _viewRangeHorizontal = 3;
-	[SerializeField] private static int _viewRangeVertical = 3;
+	[SerializeField] private static int _viewRangeHorizontal = 5;
+	[SerializeField] private static int _viewRangeVertical = 5;
 	private static Int3 _playerPos;
 
 	public class DataChunk
@@ -68,6 +68,7 @@ public class World : MonoBehaviour
 			}
 
 			_generated = true;
+			_chunk.UpdateState();
 		}
 
 		public void SetBlock(Atlas.ID block, int x, int y, int z)
@@ -332,6 +333,7 @@ public class World : MonoBehaviour
 			}
 			else
 			{
+				/*
 				// Get chunk
 				Chunk chunkScript = pair.Value.GetChunk();
 
@@ -344,6 +346,7 @@ public class World : MonoBehaviour
 					// Queue chunk for generation
 					_loadQueue.Enqueue(chunkScript, 0);
 				}
+				*/
 			}
 		}
 

@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Chunk : MonoBehaviour
 {
+	// Mesh generation
 	private List<Vector3> _newVerts = new List<Vector3>();
 	private List<int> _newTris = new List<int>();
 	private List<Vector2> _newUV = new List<Vector2>();
@@ -16,22 +17,41 @@ public class Chunk : MonoBehaviour
 	private Mesh _mesh;
 	private MeshCollider _col;
 	private bool _updateMesh;
-	private bool _render;
-	private bool _loaded;
+	private bool _clearMesh;
 
+	/*
+	 * Fresh - The chunk has been freshly created, but it has no data associated
+	 * Prepped - The chunk now has its basic data
+	 * Generating - The chunk is actively generating or retrieving block data
+	 * Loaded - The chunk has its block data loaded
+	 * Rendered - The chunk is actively rendering
+	 */
+	public enum State { Fresh, Prepped, Generating, Loaded, Rendered };
+
+	private State _state = State.Fresh;
+
+	private World.DataChunk _upChunk;
+	private World.DataChunk _downChunk;
+	private World.DataChunk _northChunk;
+	private World.DataChunk _southChunk;
+	private World.DataChunk _eastChunk;
+	private World.DataChunk _westChunk;
+
+	// Informatics
 	private int _chunkSize;
 	private Int3 _chunkPos;
 	private World.DataChunk _chunkData;
-
+	
+	// Debug
 	public bool isolateMesh;
 	private bool _updateIso;
 
 	public void LoadData(Int3 pos, World.DataChunk chunkData)
 	{
 		// One-time only!
-		if (!_loaded)
+		if (_state == State.Fresh)
 		{
-			_loaded = true;
+			_state = State.Prepped;
 
 			_chunkSize = World.GetChunkSize();
 			_chunkPos = pos;
@@ -39,14 +59,92 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
-	public void SetRender(bool render)
+	// We don't want others changing the state,
+	// so we'll ping the chunk to update it for itself
+	public void UpdateState()
 	{
-		_render = render;
+		switch (_state)
+		{
+			case State.Generating:
+				if (_chunkData.IsGenerated())
+				{
+					_state = State.Loaded;
+
+					// Attempt to get cardinal chunks
+					// This isn't guaranteed to pass, but as these chunks
+					// generate, they'll inform us of their existence
+					_upChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 1, 0)));
+					if (_upChunk != null && !_upChunk.IsGenerated()) { _upChunk = null; }
+					_downChunk = World.GetChunk(_chunkPos.Add(new Int3(0, -1, 0)));
+					if (_downChunk != null && !_downChunk.IsGenerated()) { _downChunk = null; }
+					_northChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 0, 1)));
+					if (_northChunk != null && !_northChunk.IsGenerated()) { _northChunk = null; }
+					_southChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 0, -1)));
+					if (_southChunk != null && !_southChunk.IsGenerated()) { _southChunk = null; }
+					_eastChunk = World.GetChunk(_chunkPos.Add(new Int3(1, 0, 0)));
+					if (_eastChunk != null && !_eastChunk.IsGenerated()) { _eastChunk = null; }
+					_westChunk = World.GetChunk(_chunkPos.Add(new Int3(-1, 0, 0)));
+					if (_westChunk != null && !_westChunk.IsGenerated()) { _westChunk = null; }
+
+					// Let's now ping them like the baka we are
+					if (_upChunk != null) { _upChunk.GetChunk().Ping(_chunkData, Atlas.Dir.Down); }
+					if (_downChunk != null) { _downChunk.GetChunk().Ping(_chunkData, Atlas.Dir.Up); }
+					if (_northChunk != null) { _northChunk.GetChunk().Ping(_chunkData, Atlas.Dir.South); }
+					if (_southChunk != null) { _southChunk.GetChunk().Ping(_chunkData, Atlas.Dir.North); }
+					if (_eastChunk != null) { _eastChunk.GetChunk().Ping(_chunkData, Atlas.Dir.West); }
+					if (_westChunk != null) { _westChunk.GetChunk().Ping(_chunkData, Atlas.Dir.East); }
+
+					GenerateMesh();
+				}
+				break;
+		}
 	}
 
-	public bool GetRender()
+	// A chunk exists!
+	public void Ping(World.DataChunk chunk, Atlas.Dir dir)
 	{
-		return _render;
+
+		bool nullCheck = false;
+
+		switch (dir)
+		{
+			case Atlas.Dir.Up:
+				nullCheck = (_upChunk == null);
+				_upChunk = chunk;
+				break;
+
+			case Atlas.Dir.Down:
+				nullCheck = (_downChunk == null);
+				_downChunk = chunk;
+				break;
+
+			case Atlas.Dir.North:
+				nullCheck = (_northChunk == null);
+				_northChunk = chunk;
+				break;
+
+			case Atlas.Dir.South:
+				nullCheck = (_southChunk == null);
+				_southChunk = chunk;
+				break;
+
+			case Atlas.Dir.East:
+				nullCheck = (_eastChunk == null);
+				_eastChunk = chunk;
+				break;
+
+			case Atlas.Dir.West:
+				nullCheck = (_westChunk == null);
+				_westChunk = chunk;
+				break;
+		}
+
+		// We shouldn't run if we already had the chunk before
+		if (nullCheck && _state == State.Rendered)
+		{
+			// Get new surfaces!
+			GenerateMesh(dir);
+		}
 	}
 
 	void Start()
@@ -76,62 +174,146 @@ public class Chunk : MonoBehaviour
 		// Check if data chunk blocks are generated
 		if (!_chunkData.IsGenerated())
 		{
+			_state = State.Generating;
 			_chunkData.GenerateBlocks();
 		}
 	}
 
 	public void GenerateMesh()
 	{
-		if (_render)
+		// Iterate through x, y, z
+		for (int x = 0; x < _chunkSize; x++)
 		{
-			// Iterate through x, y, z
-			for (int x = 0; x < _chunkSize; x++)
+			for (int y = 0; y < _chunkSize; y++)
 			{
-				for (int y = 0; y < _chunkSize; y++)
+				for (int z = 0; z < _chunkSize; z++)
 				{
-					for (int z = 0; z < _chunkSize; z++)
+					Atlas.ID block = Block(x, y, z);
+
+					// Generate the mesh and texturize
+					if (block != Atlas.ID.Air)
 					{
-						Atlas.ID block = Block(x, y, z);
-
-						// Generate the mesh and texturize
-						if (block != Atlas.ID.Air)
+						if (Block(x, y + 1, z) == Atlas.ID.Air)
 						{
-							if (Block(x, y + 1, z) == Atlas.ID.Air)
-							{
-								CubeUp(x, y, z, block);
-							}
+							CubeUp(x, y, z, block);
+						}
 
-							if (Block(x, y - 1, z) == Atlas.ID.Air)
-							{
-								CubeDown(x, y, z, block);
-							}
+						if (Block(x, y - 1, z) == Atlas.ID.Air)
+						{
+							CubeDown(x, y, z, block);
+						}
 
-							if (Block(x + 1, y, z) == Atlas.ID.Air)
-							{
-								CubeEast(x, y, z, block);
-							}
+						if (Block(x + 1, y, z) == Atlas.ID.Air)
+						{
+							CubeEast(x, y, z, block);
+						}
 
-							if (Block(x - 1, y, z) == Atlas.ID.Air)
-							{
-								CubeWest(x, y, z, block);
-							}
+						if (Block(x - 1, y, z) == Atlas.ID.Air)
+						{
+							CubeWest(x, y, z, block);
+						}
 
-							if (Block(x, y, z + 1) == Atlas.ID.Air)
-							{
-								CubeNorth(x, y, z, block);
-							}
+						if (Block(x, y, z + 1) == Atlas.ID.Air)
+						{
+							CubeNorth(x, y, z, block);
+						}
 
-							if (Block(x, y, z - 1) == Atlas.ID.Air)
-							{
-								CubeSouth(x, y, z, block);
-							}
+						if (Block(x, y, z - 1) == Atlas.ID.Air)
+						{
+							CubeSouth(x, y, z, block);
 						}
 					}
 				}
 			}
-
-			_updateMesh = true;
 		}
+
+		_clearMesh = true;
+		_updateMesh = true;
+	}
+
+	// This generates only border mesh stuff
+	public void GenerateMesh(Atlas.Dir dir)
+	{
+		// Start, end
+		int xS = 0; int xE = _chunkSize;
+		int yS = 0; int yE = _chunkSize;
+		int zS = 0; int zE = _chunkSize;
+		
+		switch (dir)
+		{
+			case Atlas.Dir.Up:
+				yS = _chunkSize; ++yE;
+				break;
+
+			case Atlas.Dir.Down:
+				yE = 1;
+				break;
+
+			case Atlas.Dir.East:
+				xS = _chunkSize; ++xE;
+				break;
+
+			case Atlas.Dir.West:
+				xE = 1;
+				break;
+
+			case Atlas.Dir.North:
+				zS = _chunkSize; ++zE;
+				break;
+
+			case Atlas.Dir.South:
+				zE = 1;
+				break;
+		}
+
+		// Iterate through x, y, z
+		for (int x = xS; x < xE; x++)
+		{
+			for (int y = yS; y < yE; y++)
+			{
+				for (int z = zS; z < zE; z++)
+				{
+					Atlas.ID block = Block(x, y, z);
+
+					// Generate the mesh and texturize
+					if (block != Atlas.ID.Air)
+					{
+						// Out of bounds are done in a separate method
+						if (dir == Atlas.Dir.Up && Block(x, y + 1, z) == Atlas.ID.Air)
+						{
+							CubeUp(x, y, z, block);
+						}
+
+						if (dir == Atlas.Dir.Down && Block(x, y - 1, z) == Atlas.ID.Air)
+						{
+							CubeDown(x, y, z, block);
+						}
+
+						if (dir == Atlas.Dir.East && Block(x + 1, y, z) == Atlas.ID.Air)
+						{
+							CubeEast(x, y, z, block);
+						}
+
+						if (dir == Atlas.Dir.West && Block(x - 1, y, z) == Atlas.ID.Air)
+						{
+							CubeWest(x, y, z, block);
+						}
+
+						if (dir == Atlas.Dir.North && Block(x, y, z + 1) == Atlas.ID.Air)
+						{
+							CubeNorth(x, y, z, block);
+						}
+
+						if (dir == Atlas.Dir.South && Block(x, y, z - 1) == Atlas.ID.Air)
+						{
+							CubeSouth(x, y, z, block);
+						}
+					}
+				}
+			}
+		}
+
+		_updateMesh = true;
 	}
 
 	// Local block to world blocks
@@ -149,46 +331,48 @@ public class Chunk : MonoBehaviour
 		else
 		{
 			// Outside of bounds, need to fetch
-			Int3 pos = _chunkPos;
-
-			if (x == -1)
+			if (x == -1 && _westChunk != null)
 			{
 				x = _chunkSize - 1;
-				pos = new Int3(_chunkPos.x - 1, _chunkPos.y, _chunkPos.z);
+				return _westChunk.GetBlock(x, y, z); // Error
 			}
-			else if (x == _chunkSize)
+			else if (x == _chunkSize && _eastChunk != null)
 			{
 				x = 0;
-				pos = new Int3(_chunkPos.x + 1, _chunkPos.y, _chunkPos.z);
+				return _eastChunk.GetBlock(x, y, z); // Error
 			}
-			else if (y == -1)
+			else if (y == -1 && _downChunk != null)
 			{
 				y = _chunkSize - 1;
-				pos = new Int3(_chunkPos.x, _chunkPos.y - 1, _chunkPos.z);
+				return _downChunk.GetBlock(x, y, z); // Error
 			}
-			else if (y == _chunkSize)
+			else if (y == _chunkSize && _upChunk != null)
 			{
 				y = 0;
-				pos = new Int3(_chunkPos.x, _chunkPos.y + 1, _chunkPos.z);
+				return _upChunk.GetBlock(x, y, z);
 			}
-			else if (z == -1)
+			else if (z == -1 && _southChunk != null)
 			{
 				z = _chunkSize - 1;
-				pos = new Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z - 1);
+				return _southChunk.GetBlock(x, y, z); // Error
 			}
-			else if (z == _chunkSize)
+			else if (z == _chunkSize && _northChunk != null)
 			{
 				z = 0;
-				pos = new Int3(_chunkPos.x, _chunkPos.y, _chunkPos.z + 1);
+				return _northChunk.GetBlock(x, y, z); // Error
 			}
-			
-			return World.GetBlock(pos, x, y, z);
+
+			return Atlas.ID.Stone; // Don't generate a mesh
 		}
 	}
 
 	private void UpdateMesh()
 	{
-		_mesh.Clear();
+		if (_clearMesh)
+		{
+			_clearMesh = false;
+			_mesh.Clear();
+		}
 		_mesh.vertices = _newVerts.ToArray();
 		_mesh.uv = _newUV.ToArray();
 		_mesh.triangles = _newTris.ToArray();
@@ -198,12 +382,15 @@ public class Chunk : MonoBehaviour
 		_col.sharedMesh = null;
 		_col.sharedMesh = _mesh;
 
-		_newVerts.Clear();
-		_newUV.Clear();
-		_newTris.Clear();
-		_newColors.Clear();
+		//_newVerts.Clear();
+		//_newUV.Clear();
+		//_newTris.Clear();
+		//_newColors.Clear();
 
 		_faceCount = 0;
+
+		// We are done rendering!...for now!
+		_state = State.Rendered;
 	}
 
 	private void CubeUp(int x, int y, int z, Atlas.ID block)
@@ -372,5 +559,10 @@ public class Chunk : MonoBehaviour
 		_newUV.Add(new Vector2(tUnit * texturePos.x, tUnit * texturePos.y));
 
 		_faceCount++;
+	}
+
+	public State GetState()
+	{
+		return _state;
 	}
 }
