@@ -373,6 +373,11 @@ public class World : MonoBehaviour
 		return Mathf.Max(Mathf.Abs(one.x - two.x), Mathf.Abs(one.y - two.y), Mathf.Abs(one.z - two.z));
 	}
 
+	public static float Distance(Int3 one, Int3 two)
+	{
+		return Mathf.Pow(Mathf.Pow(one.x - two.x, 2f) + Mathf.Pow(one.y - two.y, 2f) + Mathf.Pow(one.z - two.z, 2f), 1f/3f);
+	}
+
 	// This gets blocks that have already been generated in the past
 	public static Atlas.ID GetBlock(Int3 pos, int x, int y, int z)
 	{
