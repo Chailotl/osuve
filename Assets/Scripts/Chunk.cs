@@ -362,7 +362,7 @@ public class Chunk : MonoBehaviour
 				return _northChunk.GetBlock(x, y, z); // Error
 			}
 
-			return Atlas.ID.Stone; // Don't generate a mesh
+			return Atlas.ID.Solid; // Don't generate a mesh
 		}
 	}
 
