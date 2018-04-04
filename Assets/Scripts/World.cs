@@ -289,7 +289,7 @@ public class World : MonoBehaviour
 						newChunkScript.LoadData(pos, newDataChunk);
 
 						// Should chunk render yet?
-						newChunkScript.SetRender(CubeDistance(_playerPos, pos) <= _viewRangeHorizontal);
+						//newChunkScript.SetRender(CubeDistance(_playerPos, pos) <= _viewRangeHorizontal);
 
 						// Get angle difference between vectors
 						Vector3 dir = pos.Vector() * _chunkSize - Camera.main.transform.position;
