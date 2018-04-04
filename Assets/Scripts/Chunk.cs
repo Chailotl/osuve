@@ -40,13 +40,13 @@ public class Chunk : MonoBehaviour
 	// Informatics
 	private int _chunkSize;
 	private Int3 _chunkPos;
-	private World.DataChunk _chunkData;
+	private DataChunk _chunkData;
 	
 	// Debug
 	public bool isolateMesh;
 	private bool _updateIso;
 
-	public void LoadData(Int3 pos, World.DataChunk chunkData)
+	public void LoadData(Int3 pos, DataChunk chunkData)
 	{
 		// One-time only!
 		if (_state == State.Fresh)
@@ -101,7 +101,7 @@ public class Chunk : MonoBehaviour
 	}
 
 	// A chunk exists!
-	public void Ping(World.DataChunk chunk, Atlas.Dir dir)
+	public void Ping(DataChunk chunk, Atlas.Dir dir)
 	{
 
 		bool nullCheck = false;
@@ -448,7 +448,7 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.North;
 		Color color = Color.white;
 
-		if (block == Atlas.ID.Grass && Block(x, y - 1, z + 1) == Atlas.ID.Grass)
+		if (false && block == Atlas.ID.Grass && Block(x, y - 1, z + 1) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
@@ -474,7 +474,7 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.South;
 		Color color = Color.white;
 
-		if (block == Atlas.ID.Grass && Block(x, y - 1, z - 1) == Atlas.ID.Grass)
+		if (false && block == Atlas.ID.Grass && Block(x, y - 1, z - 1) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
@@ -500,7 +500,7 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.East;
 		Color color = Color.white;
 
-		if (block == Atlas.ID.Grass && Block(x + 1, y - 1, z) == Atlas.ID.Grass)
+		if (false && block == Atlas.ID.Grass && Block(x + 1, y - 1, z) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
@@ -526,7 +526,7 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.West;
 		Color color = Color.white;
 		
-		if (block == Atlas.ID.Grass && Block(x - 1, y - 1, z) == Atlas.ID.Grass)
+		if (false && block == Atlas.ID.Grass && Block(x - 1, y - 1, z) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
