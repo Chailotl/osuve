@@ -148,13 +148,13 @@ public class World : MonoBehaviour
 	{
 		private readonly Int2 _pos;
 		private int[,] _surface; // Start of stone layer
-		private int[,] _light; // Highest opaque block
+		//private int[,] _light; // Highest opaque block
 
 		public DataColumn(Int2 pos)
 		{
 			_pos = pos;
 			_surface = new int[_chunkSize, _chunkSize];
-			_light = new int[_chunkSize, _chunkSize];
+			//_light = new int[_chunkSize, _chunkSize];
 
 			for (int i = 0; i < _chunkSize; ++i)
 			{
