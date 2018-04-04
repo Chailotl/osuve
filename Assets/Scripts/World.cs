@@ -108,6 +108,13 @@ public class World : MonoBehaviour
 				return Atlas.ID.Air;
 			}
 
+			// Out of bounds!
+			if (x < 0 || x >= _chunkSize || y < 0 || y >= _chunkSize || z < 0 || z >= _chunkSize)
+			{
+				Debug.LogError("Out of bounds! " + x + ", " + y + ", " + z);
+				return Atlas.ID.Stone;
+			}
+
 			return _blocks[x, y, z];
 		}
 
