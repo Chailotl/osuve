@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Atlas : MonoBehaviour
 {
-	public enum ID : ushort { Air, Stone, Grass, Dirt, Coal, Log, Leaves };
+	public enum ID : ushort { Air, Solid, Stone, Grass, Dirt, Coal, Log, Leaves };
 
 	public static Dictionary<string, Color> Colors = new Dictionary<string, Color>();
 
