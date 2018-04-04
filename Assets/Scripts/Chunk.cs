@@ -30,7 +30,7 @@ public class Chunk : MonoBehaviour
 
 	private State _state = State.Fresh;
 
-	//private Dictionary<Int3, DataChunk>;
+	//private Dictionary<Vector3Int, DataChunk>;
 	private DataChunk _upChunk;
 	private DataChunk _downChunk;
 	private DataChunk _northChunk;
@@ -40,14 +40,14 @@ public class Chunk : MonoBehaviour
 
 	// Informatics
 	private int _chunkSize;
-	private Int3 _chunkPos;
+	private Vector3Int _chunkPos;
 	private DataChunk _chunkData;
 	
 	// Debug
 	public bool isolateMesh;
 	private bool _updateIso;
 
-	public void LoadData(Int3 pos, DataChunk chunkData)
+	public void LoadData(Vector3Int pos, DataChunk chunkData)
 	{
 		// One-time only!
 		if (_state == State.Fresh)
@@ -74,17 +74,17 @@ public class Chunk : MonoBehaviour
 					// Attempt to get cardinal chunks
 					// This isn't guaranteed to pass, but as these chunks
 					// generate, they'll inform us of their existence
-					_upChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 1, 0)));
+					_upChunk = World.GetChunk(_chunkPos + Vector3Int.up);
 					if (_upChunk != null && !_upChunk.IsGenerated()) { _upChunk = null; }
-					_downChunk = World.GetChunk(_chunkPos.Add(new Int3(0, -1, 0)));
+					_downChunk = World.GetChunk(_chunkPos + Vector3Int.down);
 					if (_downChunk != null && !_downChunk.IsGenerated()) { _downChunk = null; }
-					_northChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 0, 1)));
+					_northChunk = World.GetChunk(_chunkPos + Vector3Int.FloorToInt(Vector3.forward));
 					if (_northChunk != null && !_northChunk.IsGenerated()) { _northChunk = null; }
-					_southChunk = World.GetChunk(_chunkPos.Add(new Int3(0, 0, -1)));
+					_southChunk = World.GetChunk(_chunkPos + Vector3Int.FloorToInt(Vector3.back));
 					if (_southChunk != null && !_southChunk.IsGenerated()) { _southChunk = null; }
-					_eastChunk = World.GetChunk(_chunkPos.Add(new Int3(1, 0, 0)));
+					_eastChunk = World.GetChunk(_chunkPos + Vector3Int.right);
 					if (_eastChunk != null && !_eastChunk.IsGenerated()) { _eastChunk = null; }
-					_westChunk = World.GetChunk(_chunkPos.Add(new Int3(-1, 0, 0)));
+					_westChunk = World.GetChunk(_chunkPos + Vector3Int.left);
 					if (_westChunk != null && !_westChunk.IsGenerated()) { _westChunk = null; }
 
 					// Let's now ping them like the baka we are

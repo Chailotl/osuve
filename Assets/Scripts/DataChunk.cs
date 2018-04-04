@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DataChunk
 {
-	private readonly Int3 _pos;
+	private readonly Vector3Int _pos;
 	private Chunk _chunk;
 	private Atlas.ID[,,] _blocks;
 	private DataColumn _column;
@@ -12,7 +12,7 @@ public class DataChunk
 	private bool _generated;
 	private int _density;
 
-	public DataChunk(Int3 pos, Chunk chunk, DataColumn column)
+	public DataChunk(Vector3Int pos, Chunk chunk, DataColumn column)
 	{
 		_pos = pos;
 		_chunk = chunk;
