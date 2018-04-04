@@ -217,7 +217,7 @@ public class World : MonoBehaviour
 
 			if (newChunkScript != null)
 			{
-				Debug.Log("Rendering next chunk");
+				// Errors in threads need to be manually caught and sent to the main thread
 				try
 				{
 					newChunkScript.GenerateBlocks();
