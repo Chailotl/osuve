@@ -22,7 +22,7 @@ These images are likely to be outdated due to the current fast pace of changes.
 
 ## Getting Started :fast_forward:
 
-Lucky for you, all you need to get this up and running is the latest copy of Unity—if it wasn't already obvious :stuck_out_tongue:
+Lucky for you, all you need to get this up and running is the latest copy of [Unity](https://unity3d.com/get-unity/download)—if it wasn't already obvious :stuck_out_tongue:
 
 ## License :lock_with_ink_pen:
 
