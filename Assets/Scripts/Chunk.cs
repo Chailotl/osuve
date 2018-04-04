@@ -30,12 +30,13 @@ public class Chunk : MonoBehaviour
 
 	private State _state = State.Fresh;
 
-	private World.DataChunk _upChunk;
-	private World.DataChunk _downChunk;
-	private World.DataChunk _northChunk;
-	private World.DataChunk _southChunk;
-	private World.DataChunk _eastChunk;
-	private World.DataChunk _westChunk;
+	//private Dictionary<Int3, DataChunk>;
+	private DataChunk _upChunk;
+	private DataChunk _downChunk;
+	private DataChunk _northChunk;
+	private DataChunk _southChunk;
+	private DataChunk _eastChunk;
+	private DataChunk _westChunk;
 
 	// Informatics
 	private int _chunkSize;
