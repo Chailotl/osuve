@@ -58,13 +58,14 @@ namespace Kino
             set { _fadeToSkybox = value; }
         }
 
-        #endregion
+		#endregion
 
-        #region Private Properties
+		#region Private Properties
 
-        [SerializeField] Shader _shader;
+		[SerializeField] Shader _shader;
 
-        Material _material;
+		ReflectionProbe _reflectionProbe;
+		Material _material;
 
         #endregion
 
@@ -73,7 +74,8 @@ namespace Kino
         void OnEnable()
         {
             GetComponent<Camera>().depthTextureMode |= DepthTextureMode.Depth;
-        }
+			_reflectionProbe = GetComponent<ReflectionProbe>();
+		}
 
         [ImageEffectOpaque]
         void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -126,7 +128,12 @@ namespace Kino
                 // Transfer the skybox parameters.
                 var skybox = RenderSettings.skybox;
                 _material.SetTexture("_SkyCubemap", skybox.GetTexture("_Tex"));
-                _material.SetColor("_SkyTint", skybox.GetColor("_Tint"));
+				if (_reflectionProbe != null)
+				{
+					_material.SetTexture("_SkyCubemap", _reflectionProbe.texture);
+					//_material.mainTexture = _reflectionProbe.texture;
+				}
+				_material.SetColor("_SkyTint", skybox.GetColor("_Tint"));
                 _material.SetFloat("_SkyExposure", skybox.GetFloat("_Exposure"));
                 _material.SetFloat("_SkyRotation", skybox.GetFloat("_Rotation"));
             }

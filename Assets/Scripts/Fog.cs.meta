@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: ee4ab9821096c489f84e50f35b7b9644
-timeCreated: 1435839407
-licenseType: Pro
+timeCreated: 1522886261
+licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - _fogColorTexture: {fileID: 8400000, guid: 233bb90ab9eaf5148b5a2fd43013624c, type: 2}
   - _shader: {fileID: 4800000, guid: 3514cc2676a6c4db294c28459f22c359, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
