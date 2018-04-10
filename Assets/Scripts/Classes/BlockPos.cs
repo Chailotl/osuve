@@ -20,13 +20,7 @@ public struct BlockPos : IEquatable<BlockPos>
 		y = _y;
 		z = _z;
 
-		// Offset chunk
-		chunkPos = chunkPos + new ChunkPos( (int) Math.Floor(x / (float)World.chunkSize), (int) Math.Floor(y / (float)World.chunkSize), (int) Math.Floor(z / (float)World.chunkSize) );
-
-		// Clamp blocks
-		x = x % World.chunkSize;
-		y = y % World.chunkSize;
-		z = z % World.chunkSize;
+		Correct();
 	}
 
 	public BlockPos(int _x, int _y, int _z)
@@ -36,13 +30,7 @@ public struct BlockPos : IEquatable<BlockPos>
 		y = _y;
 		z = _z;
 
-		// Offset chunk
-		chunkPos = chunkPos + new ChunkPos((int)Math.Floor(x / (float)World.chunkSize), (int)Math.Floor(y / (float)World.chunkSize), (int)Math.Floor(z / (float)World.chunkSize));
-
-		// Clamp blocks
-		x = x % World.chunkSize;
-		y = y % World.chunkSize;
-		z = z % World.chunkSize;
+		Correct();
 	}
 
 	// Fancy methods
@@ -60,6 +48,22 @@ public struct BlockPos : IEquatable<BlockPos>
 	public int GetWorldZ()
 	{
 		return chunkPos.z * World.chunkSize + z;
+	}
+
+	private int Mod(int x, int m)
+	{
+		return (x % m + m) % m;
+	}
+
+	private void Correct()
+	{
+		// Offset chunk
+		chunkPos = chunkPos + new ChunkPos((int)Math.Floor(x / (float)World.chunkSize), (int)Math.Floor(y / (float)World.chunkSize), (int)Math.Floor(z / (float)World.chunkSize));
+
+		// Clamp blocks
+		x = Mod(x, World.chunkSize);
+		y = Mod(y, World.chunkSize);
+		z = Mod(z, World.chunkSize);
 	}
 
 	// Base methods
