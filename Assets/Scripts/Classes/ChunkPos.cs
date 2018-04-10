@@ -73,6 +73,11 @@ public struct ChunkPos : IEquatable<ChunkPos>
 		return new ChunkPos(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 	}
 
+	public static ChunkPos operator -(ChunkPos lhs, ChunkPos rhs)
+	{
+		return new ChunkPos(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+	}
+
 	public static Vector3 operator *(ChunkPos lhs, float rhs)
 	{
 		return new Vector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
