@@ -209,16 +209,6 @@ public class World : MonoBehaviour
 		_chunks.Remove(pos); // Remove chunk from main list
 	}
 
-	public static float CubeDistance(Vector3Int one, Vector3Int two)
-	{
-		return Mathf.Max(Mathf.Abs(one.x - two.x), Mathf.Abs(one.y - two.y), Mathf.Abs(one.z - two.z));
-	}
-
-	public static float Distance(Vector3Int one, Vector3Int two)
-	{
-		return Mathf.Pow(Mathf.Pow(one.x - two.x, 2f) + Mathf.Pow(one.y - two.y, 2f) + Mathf.Pow(one.z - two.z, 2f), 1f/3f);
-	}
-
 	// This gets blocks that have already been generated in the past
 	public static Atlas.ID GetBlock(Vector3Int pos, int x, int y, int z)
 	{
@@ -317,35 +307,8 @@ public class World : MonoBehaviour
 		DataChunk chunk;
 		_chunks.TryGetValue(chunkPos, out chunk);
 		return chunk;
-
-		// Above is slightly faster, but not meaningfully
-		/*if (_chunks.ContainsKey(pos))
-		{
-			return _chunks[pos];
-		}
-		else
-		{
-			return null;
-		}*/
-	}
-	
-	// This gives the chunk that the world block resides in
-	public static Vector3Int WhichChunk(Vector3Int blockPos)
-	{
-		int x = (int) Mathf.Floor(blockPos.x / (float) _chunkSize);
-		int y = (int) Mathf.Floor(blockPos.y / (float) _chunkSize);
-		int z = (int) Mathf.Floor(blockPos.z / (float) _chunkSize);
-
-		return new Vector3Int(x, y, z);
 	}
 
-	// This clamps the world block to a local block
-	public static Vector3Int ClampBlock(Vector3Int blockPos)
 	{
-		int x = blockPos.x % _chunkSize;
-		int y = blockPos.y % _chunkSize;
-		int z = blockPos.z % _chunkSize;
-
-		return new Vector3Int(x, y, z);
 	}
 }
