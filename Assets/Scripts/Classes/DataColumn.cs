@@ -11,14 +11,14 @@ public struct DataColumn
 	public DataColumn(Vector2Int pos)
 	{
 		_pos = pos;
-		_surface = new int[World.GetChunkSize(), World.GetChunkSize()];
+		_surface = new int[World.chunkSize, World.chunkSize];
 		//_light = new int[_chunkSize, _chunkSize];
 
-		for (int i = 0; i < World.GetChunkSize(); ++i)
+		for (int i = 0; i < World.chunkSize; ++i)
 		{
-			for (int j = 0; j < World.GetChunkSize(); ++j)
+			for (int j = 0; j < World.chunkSize; ++j)
 			{
-				_surface[i, j] = World.GenerateTopology(i + _pos.x * World.GetChunkSize(), j + _pos.y * World.GetChunkSize());
+				_surface[i, j] = World.GenerateTopology(i + _pos.x * World.chunkSize, j + _pos.z * World.chunkSize);
 				//_light[i, j] = _surface[i, j] + 3;
 			}
 		}
@@ -28,13 +28,13 @@ public struct DataColumn
 	{
 		// Query is outside of our array
 		// Assuming world —> local
-		if (x < 0 || x >= World.GetChunkSize() || z < 0 || z >= World.GetChunkSize())
+		if (x < 0 || x >= World.chunkSize || z < 0 || z >= World.chunkSize)
 		{
-			x -= _pos.x * World.GetChunkSize();
-			z -= _pos.y * World.GetChunkSize();
+			x -= _pos.x * World.chunkSize;
+			z -= _pos.z * World.chunkSize;
 		}
 
-		if (x < 0 || x >= World.GetChunkSize() || z < 0 || z >= World.GetChunkSize())
+		if (x < 0 || x >= World.chunkSize || z < 0 || z >= World.chunkSize)
 		{
 			return 0;
 		}

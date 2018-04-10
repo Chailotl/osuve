@@ -16,7 +16,7 @@ public class DataChunk
 	{
 		_pos = pos;
 		_chunk = chunk;
-		_blocks = new Atlas.ID[World.GetChunkSize(), World.GetChunkSize(), World.GetChunkSize()];
+		_blocks = new Atlas.ID[World.chunkSize, World.chunkSize, World.chunkSize];
 		_column = column; //_columns[_pos];
 
 		_generated = false;
@@ -25,11 +25,11 @@ public class DataChunk
 
 	public void GenerateBlocks()
 	{
-		for (int x = 0; x < World.GetChunkSize(); ++x)
+		for (int x = 0; x < World.chunkSize; ++x)
 		{
-			for (int y = 0; y < World.GetChunkSize(); ++y)
+			for (int y = 0; y < World.chunkSize; ++y)
 			{
-				for (int z = 0; z < World.GetChunkSize(); ++z)
+				for (int z = 0; z < World.chunkSize; ++z)
 				{
 					Atlas.ID block = World.GenerateBlock(_column, _pos.x * World.GetChunkSize() + x, _pos.y * World.GetChunkSize() + y, _pos.z * World.GetChunkSize() + z);
 
@@ -62,7 +62,7 @@ public class DataChunk
 		// Unnullify
 		if (_blocks == null)
 		{
-			_blocks = new Atlas.ID[World.GetChunkSize(), World.GetChunkSize(), World.GetChunkSize()];
+			_blocks = new Atlas.ID[World.chunkSize, World.chunkSize, World.chunkSize];
 		}
 
 		_blocks[x, y, z] = block;
