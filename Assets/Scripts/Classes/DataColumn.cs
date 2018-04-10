@@ -4,11 +4,11 @@ using UnityEngine;
 
 public struct DataColumn
 {
-	private readonly Vector2Int _pos;
+	private readonly ColumnPos _pos;
 	private int[,] _surface; // Start of stone layer
 	//private int[,] _light; // Highest opaque block
 
-	public DataColumn(Vector2Int pos)
+	public DataColumn(ColumnPos pos)
 	{
 		_pos = pos;
 		_surface = new int[World.chunkSize, World.chunkSize];

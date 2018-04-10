@@ -70,7 +70,7 @@ public class Chunk : MonoBehaviour
 					// Attempt to get cardinal chunks
 					// This isn't guaranteed to pass, but as these chunks
 					// generate, they'll inform us of their existence
-					_upChunk = World.GetChunk(_chunkPos + ChunkPos.up);
+					/*_upChunk = World.GetChunk(_chunkPos + ChunkPos.up);
 					if (_upChunk != null && !_upChunk.IsGenerated()) { _upChunk = null; }
 					_downChunk = World.GetChunk(_chunkPos + ChunkPos.down);
 					if (_downChunk != null && !_downChunk.IsGenerated()) { _downChunk = null; }
@@ -89,7 +89,7 @@ public class Chunk : MonoBehaviour
 					if (_northChunk != null) { _northChunk.GetChunk().Ping(_chunkData, Atlas.Dir.South); }
 					if (_southChunk != null) { _southChunk.GetChunk().Ping(_chunkData, Atlas.Dir.North); }
 					if (_eastChunk != null) { _eastChunk.GetChunk().Ping(_chunkData, Atlas.Dir.West); }
-					if (_westChunk != null) { _westChunk.GetChunk().Ping(_chunkData, Atlas.Dir.East); }
+					if (_westChunk != null) { _westChunk.GetChunk().Ping(_chunkData, Atlas.Dir.East); }*/
 
 					GenerateMesh();
 				}
@@ -98,9 +98,8 @@ public class Chunk : MonoBehaviour
 	}
 
 	// A chunk exists!
-	public void Ping(DataChunk chunk, Atlas.Dir dir)
+	/*public void Ping(DataChunk chunk, Atlas.Dir dir)
 	{
-
 		bool nullCheck = false;
 
 		switch (dir)
@@ -142,7 +141,7 @@ public class Chunk : MonoBehaviour
 			// Get new surfaces!
 			GenerateMesh(dir);
 		}
-	}
+	}*/
 
 	void Start()
 	{
@@ -185,37 +184,39 @@ public class Chunk : MonoBehaviour
 			{
 				for (int z = 0; z < _chunkSize; z++)
 				{
-					Atlas.ID block = Block(x, y, z);
+					BlockPos pos = new BlockPos(_chunkPos, x, y, z);
+
+					Atlas.ID block = Block(pos);
 
 					// Generate the mesh and texturize
 					if (block != Atlas.ID.Air)
 					{
-						if (Block(x, y + 1, z) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.up) == Atlas.ID.Air)
 						{
 							CubeUp(x, y, z, block);
 						}
 
-						if (Block(x, y - 1, z) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.down) == Atlas.ID.Air)
 						{
 							CubeDown(x, y, z, block);
 						}
 
-						if (Block(x + 1, y, z) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.east) == Atlas.ID.Air)
 						{
 							CubeEast(x, y, z, block);
 						}
 
-						if (Block(x - 1, y, z) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.west) == Atlas.ID.Air)
 						{
 							CubeWest(x, y, z, block);
 						}
 
-						if (Block(x, y, z + 1) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.north) == Atlas.ID.Air)
 						{
 							CubeNorth(x, y, z, block);
 						}
 
-						if (Block(x, y, z - 1) == Atlas.ID.Air)
+						if (Block(pos + BlockPos.south) == Atlas.ID.Air)
 						{
 							CubeSouth(x, y, z, block);
 						}
@@ -270,38 +271,40 @@ public class Chunk : MonoBehaviour
 			{
 				for (int z = zS; z < zE; z++)
 				{
-					Atlas.ID block = Block(x, y, z);
+					BlockPos pos = new BlockPos(x, y, z);
+
+					Atlas.ID block = Block(pos);
 
 					// Generate the mesh and texturize
 					if (block != Atlas.ID.Air)
 					{
 						// Out of bounds are done in a separate method
-						if (dir == Atlas.Dir.Up && Block(x, y + 1, z) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.Up && Block(pos + BlockPos.up) == Atlas.ID.Air)
 						{
 							CubeUp(x, y, z, block);
 						}
 
-						if (dir == Atlas.Dir.Down && Block(x, y - 1, z) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.Down && Block(pos + BlockPos.down) == Atlas.ID.Air)
 						{
 							CubeDown(x, y, z, block);
 						}
 
-						if (dir == Atlas.Dir.East && Block(x + 1, y, z) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.East && Block(pos + BlockPos.east) == Atlas.ID.Air)
 						{
 							CubeEast(x, y, z, block);
 						}
 
-						if (dir == Atlas.Dir.West && Block(x - 1, y, z) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.West && Block(pos + BlockPos.west) == Atlas.ID.Air)
 						{
 							CubeWest(x, y, z, block);
 						}
 
-						if (dir == Atlas.Dir.North && Block(x, y, z + 1) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.North && Block(pos + BlockPos.north) == Atlas.ID.Air)
 						{
 							CubeNorth(x, y, z, block);
 						}
 
-						if (dir == Atlas.Dir.South && Block(x, y, z - 1) == Atlas.ID.Air)
+						if (dir == Atlas.Dir.South && Block(pos + BlockPos.south) == Atlas.ID.Air)
 						{
 							CubeSouth(x, y, z, block);
 						}
@@ -314,12 +317,16 @@ public class Chunk : MonoBehaviour
 	}
 
 	// Local block to world blocks
-	private Atlas.ID Block(int x, int y, int z)
+	private Atlas.ID Block(BlockPos pos)
 	{
-		if (x >= 0 && x < _chunkSize && y >= 0 && y < _chunkSize && z >= 0 && z < _chunkSize)
+		int x = pos.x;
+		int y = pos.y;
+		int z = pos.z;
+
+		if (pos.chunkPos == _chunkPos)
 		{
 			// In bounds, we have the data available to us
-			return _chunkData.GetBlock(x, y, z);
+			return _chunkData.GetBlock(pos);
 		}
 		else if (isolateMesh)
 		{
@@ -327,39 +334,9 @@ public class Chunk : MonoBehaviour
 		}
 		else
 		{
-			// Outside of bounds, need to fetch
-			if (x == -1 && _westChunk != null)
-			{
-				x = _chunkSize - 1;
-				return _westChunk.GetBlock(x, y, z); // Error
-			}
-			else if (x == _chunkSize && _eastChunk != null)
-			{
-				x = 0;
-				return _eastChunk.GetBlock(x, y, z); // Error
-			}
-			else if (y == -1 && _downChunk != null)
-			{
-				y = _chunkSize - 1;
-				return _downChunk.GetBlock(x, y, z); // Error
-			}
-			else if (y == _chunkSize && _upChunk != null)
-			{
-				y = 0;
-				return _upChunk.GetBlock(x, y, z);
-			}
-			else if (z == -1 && _southChunk != null)
-			{
-				z = _chunkSize - 1;
-				return _southChunk.GetBlock(x, y, z); // Error
-			}
-			else if (z == _chunkSize && _northChunk != null)
-			{
-				z = 0;
-				return _northChunk.GetBlock(x, y, z); // Error
-			}
+			return World.GetBlock(pos);
 
-			return Atlas.ID.Solid; // Don't generate a mesh
+			//return Atlas.ID.Solid; // Don't generate a mesh
 		}
 	}
 
@@ -445,11 +422,11 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.North;
 		Color color = Color.white;
 
-		if (false && block == Atlas.ID.Grass && Block(x, y - 1, z + 1) == Atlas.ID.Grass)
+		/*if (false && block == Atlas.ID.Grass && Block(x, y - 1, z + 1) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
-		}
+		}*/
 
 		_newColors.Add(color);
 		_newColors.Add(color);
@@ -471,11 +448,11 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.South;
 		Color color = Color.white;
 
-		if (false && block == Atlas.ID.Grass && Block(x, y - 1, z - 1) == Atlas.ID.Grass)
+		/*if (false && block == Atlas.ID.Grass && Block(x, y - 1, z - 1) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
-		}
+		}*/
 
 		_newColors.Add(color);
 		_newColors.Add(color);
@@ -497,11 +474,11 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.East;
 		Color color = Color.white;
 
-		if (false && block == Atlas.ID.Grass && Block(x + 1, y - 1, z) == Atlas.ID.Grass)
+		/*if (false && block == Atlas.ID.Grass && Block(x + 1, y - 1, z) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
-		}
+		}*/
 
 		_newColors.Add(color);
 		_newColors.Add(color);
@@ -523,11 +500,11 @@ public class Chunk : MonoBehaviour
 		Atlas.Dir dir = Atlas.Dir.West;
 		Color color = Color.white;
 		
-		if (false && block == Atlas.ID.Grass && Block(x - 1, y - 1, z) == Atlas.ID.Grass)
+		/*if (false && block == Atlas.ID.Grass && Block(x - 1, y - 1, z) == Atlas.ID.Grass)
 		{
 			dir = Atlas.Dir.Up;
 			color = Atlas.Colors["Normal_1"] * 2f; // Multiplier that most Unity shaders seem to use to brighten
-		}
+		}*/
 
 		_newColors.Add(color);
 		_newColors.Add(color);

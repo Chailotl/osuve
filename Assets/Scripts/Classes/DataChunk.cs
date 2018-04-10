@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DataChunk
 {
-	private readonly Vector3Int _pos;
+	private readonly ChunkPos _pos;
 	private Chunk _chunk;
 	private Atlas.ID[,,] _blocks;
 	private DataColumn _column;
@@ -12,7 +12,7 @@ public class DataChunk
 	private bool _generated;
 	private int _density;
 
-	public DataChunk(Vector3Int pos, Chunk chunk, DataColumn column)
+	public DataChunk(ChunkPos pos, Chunk chunk, DataColumn column)
 	{
 		_pos = pos;
 		_chunk = chunk;
@@ -31,7 +31,7 @@ public class DataChunk
 			{
 				for (int z = 0; z < World.chunkSize; ++z)
 				{
-					Atlas.ID block = World.GenerateBlock(_column, _pos.x * World.GetChunkSize() + x, _pos.y * World.GetChunkSize() + y, _pos.z * World.GetChunkSize() + z);
+					Atlas.ID block = World.GenerateBlock(new BlockPos(_pos, x, y, z));
 
 					// Skip air
 					if (block == Atlas.ID.Air)
@@ -54,10 +54,12 @@ public class DataChunk
 		_chunk.UpdateState();
 	}
 
-	public void SetBlock(Atlas.ID block, int x, int y, int z)
+	public void SetBlock(Atlas.ID block, BlockPos pos)
 	{
 		// Do not give us air!
 		if (block == Atlas.ID.Air) { return; }
+		// Something is amiss, it should be our chunk pos
+		if (pos.chunkPos != _pos) { return; }
 
 		// Unnullify
 		if (_blocks == null)
@@ -65,17 +67,19 @@ public class DataChunk
 			_blocks = new Atlas.ID[World.chunkSize, World.chunkSize, World.chunkSize];
 		}
 
-		_blocks[x, y, z] = block;
+		_blocks[pos.x, pos.y, pos.z] = block;
 
 		++_density;
 	}
 
-	public void RemoveBlock(int x, int y, int z)
+	public void RemoveBlock(BlockPos pos)
 	{
+		// Something is amiss, it should be our chunk pos
+		if (pos.chunkPos != _pos) { return; }
 		// Already empty!
-		if (_blocks == null || _blocks[x, y, z] == Atlas.ID.Air) { return; }
+		if (_blocks == null || _blocks[pos.x, pos.y, pos.z] == Atlas.ID.Air) { return; }
 
-		_blocks[x, y, z] = Atlas.ID.Air;
+		_blocks[pos.x, pos.y, pos.z] = Atlas.ID.Air;
 
 		// Check for nullification
 		if (--_density == 0)
@@ -84,22 +88,17 @@ public class DataChunk
 		}
 	}
 
-	public Atlas.ID GetBlock(int x, int y, int z)
+	public Atlas.ID GetBlock(BlockPos pos)
 	{
 		// Empty!
 		if (_blocks == null)
 		{
 			return Atlas.ID.Air;
 		}
+		// Something is amiss, it should be our chunk pos
+		if (pos.chunkPos != _pos) { return Atlas.ID.Air; }
 
-		// Out of bounds!
-		if (x < 0 || x >= World.GetChunkSize() || y < 0 || y >= World.GetChunkSize() || z < 0 || z >= World.GetChunkSize())
-		{
-			Debug.LogError("Out of bounds! " + x + ", " + y + ", " + z);
-			return Atlas.ID.Solid;
-		}
-
-		return _blocks[x, y, z];
+		return _blocks[pos.x, pos.y, pos.z];
 	}
 
 	public void SetChunk(Chunk chunk)

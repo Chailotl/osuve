@@ -7,20 +7,20 @@ using Priority_Queue;
 public class World : MonoBehaviour
 {
 	[SerializeField] private GameObject _chunkPrefab;
-	private static Dictionary<Vector3Int, DataChunk> _chunks = new Dictionary<Vector3Int, DataChunk>();
-	private static Dictionary<Vector2Int, DataColumn> _columns = new Dictionary<Vector2Int, DataColumn>();
-	private static Dictionary<Vector3Int, DataChunk> _offloadChunks = new Dictionary<Vector3Int, DataChunk>();
+	private static Dictionary<ChunkPos, DataChunk> _chunks = new Dictionary<ChunkPos, DataChunk>();
+	private static Dictionary<ColumnPos, DataColumn> _columns = new Dictionary<ColumnPos, DataColumn>();
+	private static Dictionary<ChunkPos, DataChunk> _offloadChunks = new Dictionary<ChunkPos, DataChunk>();
 	private SimplePriorityQueue<Chunk> _loadQueue = new SimplePriorityQueue<Chunk>();
 	private bool _rendering;
 
 	public const int chunkSize = 16;
 	[SerializeField] private static int _viewRangeHorizontal = 3;
 	[SerializeField] private static int _viewRangeVertical = 3;
-	private static Vector3Int _playerPos;
+	private static ChunkPos _playerPos;
 
 	void Start()
 	{
-		_playerPos = Vector3Int.FloorToInt(Camera.main.transform.position / _chunkSize);
+		_playerPos = new ChunkPos(Camera.main.transform.position / chunkSize);
 
 		GenerateChunks();
 
@@ -31,10 +31,10 @@ public class World : MonoBehaviour
 
 	void Update()
 	{
-		Vector3Int temp = Vector3Int.FloorToInt(Camera.main.transform.position / _chunkSize);
+		ChunkPos temp = new ChunkPos(Camera.main.transform.position / chunkSize);
 
 		// Did player move from their chunk?
-		if (CubeDistance(temp, _playerPos) > 0)
+		if (ChunkPos.CubeDistance(temp, _playerPos) > 0)
 		{
 			_playerPos = temp; // Set new pos
 			GenerateChunks(); // Generate new chunks
@@ -76,7 +76,7 @@ public class World : MonoBehaviour
 		{
 			for (int z = _playerPos.z - _viewRangeHorizontal - 1; z <= _playerPos.z + _viewRangeHorizontal + 1; ++z)
 			{
-				Vector2Int grid = new Vector2Int(x, z);
+				ColumnPos grid = new ColumnPos(x, z);
 
 				DataColumn newDataColumn;
 
@@ -96,10 +96,10 @@ public class World : MonoBehaviour
 
 				for (int y = _playerPos.y - _viewRangeVertical - 1; y <= _playerPos.y + _viewRangeVertical + 1; ++y)
 				{
-					Vector3Int pos = new Vector3Int(x, y, z);
+					ChunkPos pos = new ChunkPos(x, y, z);
 					
                     // Does chunk exist?
-					if (!_chunks.ContainsKey(pos) && Distance(pos, _playerPos) <= _viewRangeHorizontal)
+					if (!_chunks.ContainsKey(pos))// && ChunkPos.Distance(pos, _playerPos) <= _viewRangeHorizontal)
 					{
 						// Create new chunk and get corresponding script
 						GameObject newChunk = Instantiate(_chunkPrefab, new Vector3(x * chunkSize, y * chunkSize, z * chunkSize), Quaternion.identity);
@@ -160,12 +160,12 @@ public class World : MonoBehaviour
 
 	private void PingChunks()
 	{
-		List<Vector3Int> temp = new List<Vector3Int>();
+		List<ChunkPos> temp = new List<ChunkPos>();
 
         // Collect all chunks that need to be deleted
-		foreach (KeyValuePair<Vector3Int, DataChunk> pair in _chunks)
+		foreach (KeyValuePair<ChunkPos, DataChunk> pair in _chunks)
 		{
-			if (CubeDistance(pair.Key, _playerPos) > _viewRangeHorizontal + 1)
+			if (ChunkPos.CubeDistance(pair.Key, _playerPos) > _viewRangeHorizontal + 1)
 			{
 				temp.Add(pair.Key);
 			}
@@ -196,13 +196,13 @@ public class World : MonoBehaviour
 		}
 
 		// Destroy chunk
-		foreach (Vector3Int key in temp)
+		foreach (ChunkPos key in temp)
 		{
 			DestroyChunk(key);
 		}
 	}
 
-	private void DestroyChunk(Vector3Int pos)
+	private void DestroyChunk(ChunkPos pos)
 	{
 		Destroy(_chunks[pos].GetChunk()); // Delete corresponding gameobject
 		//_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
@@ -210,14 +210,20 @@ public class World : MonoBehaviour
 	}
 
 	// This gets blocks that have already been generated in the past
-	public static Atlas.ID GetBlock(Vector3Int pos, int x, int y, int z)
+	public static Atlas.ID GetBlock(BlockPos pos)
 	{
-		return _chunks[pos].GetBlock(x, y, z);
+		return GenerateBlock(pos);
+		return _chunks[pos.chunkPos].GetBlock(pos);
 	}
 
 	// This is the main world generation function per block
-	public static Atlas.ID GenerateBlock(DataColumn column, int x, int y, int z)
+	public static Atlas.ID GenerateBlock(BlockPos pos)
 	{
+		int x = pos.GetWorldX();
+		int y = pos.GetWorldY();
+		int z = pos.GetWorldZ();
+		DataColumn column = GetColumn(pos.chunkPos);
+
 		// Topology
 		float stone = column.GetSurface(x, z);
 		float dirt = 3;
@@ -297,13 +303,17 @@ public class World : MonoBehaviour
 		return _viewRangeHorizontal;
 	}
 
-	public static DataChunk GetChunk(Vector3Int chunkPos)
+	public static DataChunk GetChunk(ChunkPos chunkPos)
 	{
 		DataChunk chunk;
 		_chunks.TryGetValue(chunkPos, out chunk);
 		return chunk;
 	}
 
+	public static DataColumn GetColumn(ColumnPos columnPos)
 	{
+		DataColumn column;
+		_columns.TryGetValue(columnPos, out column);
+		return column;
 	}
 }
