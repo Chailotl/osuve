@@ -95,21 +95,26 @@ public struct BlockPos : IEquatable<BlockPos>
 
 	public static BlockPos operator +(BlockPos lhs, BlockPos rhs)
 	{
-		return new BlockPos(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+		return new BlockPos(lhs.chunkPos + rhs.chunkPos, lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+	}
+
+	public static BlockPos operator -(BlockPos lhs, BlockPos rhs)
+	{
+		return new BlockPos(lhs.chunkPos - rhs.chunkPos, lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 	}
 
 	public static bool operator ==(BlockPos lhs, BlockPos rhs)
 	{
-		return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
+		return (lhs.chunkPos == rhs.chunkPos && lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 	}
 
 	public static bool operator !=(BlockPos lhs, BlockPos rhs)
 	{
-		return (lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z);
+		return (lhs.chunkPos != rhs.chunkPos && lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z);
 	}
 
-	/*public static implicit operator BlockPos(BlockPos rhs)
+	public static implicit operator ChunkPos(BlockPos rhs)
 	{
-		return new BlockPos(rhs.x, rhs.z);
-	}*/
+		return rhs.chunkPos;
+	}
 }
