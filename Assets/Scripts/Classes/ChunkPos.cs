@@ -27,8 +27,20 @@ public struct ChunkPos : IEquatable<ChunkPos>
 		z = Mathf.FloorToInt(vec.z);
 	}
 
+	// Fancy Methods
+
+	public static float Distance(ChunkPos one, ChunkPos two)
+	{
+		return Mathf.Pow(Mathf.Pow(one.x - two.x, 2f) + Mathf.Pow(one.y - two.y, 2f) + Mathf.Pow(one.z - two.z, 2f), 1f / 3f);
+	}
+
+	public static float CubeDistance(ChunkPos one, ChunkPos two)
+	{
+		return Mathf.Max(Mathf.Abs(one.x - two.x), Mathf.Abs(one.y - two.y), Mathf.Abs(one.z - two.z));
+	}
+
 	// Base methods
-	
+
 	public override string ToString()
 	{
 		return "Chunk: (" + x + ", " + y + ", " + z + ")";
@@ -59,6 +71,11 @@ public struct ChunkPos : IEquatable<ChunkPos>
 	public static ChunkPos operator +(ChunkPos lhs, ChunkPos rhs)
 	{
 		return new ChunkPos(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+	}
+
+	public static Vector3 operator *(ChunkPos lhs, float rhs)
+	{
+		return new Vector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 	}
 
 	public static bool operator ==(ChunkPos lhs, ChunkPos rhs)
