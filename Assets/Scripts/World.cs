@@ -13,7 +13,7 @@ public class World : MonoBehaviour
 	private SimplePriorityQueue<Chunk> _loadQueue = new SimplePriorityQueue<Chunk>();
 	private bool _rendering;
 
-	[SerializeField] private static int _chunkSize = 16;
+	public const int chunkSize = 16;
 	[SerializeField] private static int _viewRangeHorizontal = 3;
 	[SerializeField] private static int _viewRangeVertical = 3;
 	private static Vector3Int _playerPos;
@@ -102,7 +102,7 @@ public class World : MonoBehaviour
 					if (!_chunks.ContainsKey(pos) && Distance(pos, _playerPos) <= _viewRangeHorizontal)
 					{
 						// Create new chunk and get corresponding script
-						GameObject newChunk = Instantiate(_chunkPrefab, new Vector3(x * _chunkSize, y * _chunkSize, z * _chunkSize), Quaternion.identity);
+						GameObject newChunk = Instantiate(_chunkPrefab, new Vector3(x * chunkSize, y * chunkSize, z * chunkSize), Quaternion.identity);
 						Chunk newChunkScript = newChunk.GetComponent<Chunk>();
 
 						DataChunk newDataChunk;
@@ -131,11 +131,11 @@ public class World : MonoBehaviour
 						//newChunkScript.SetRender(CubeDistance(_playerPos, pos) <= _viewRangeHorizontal);
 
 						// Get angle difference between vectors
-						Vector3 dir = pos * _chunkSize - Camera.main.transform.position;
+						Vector3 dir = pos * chunkSize - Camera.main.transform.position;
 						float dist = dir.magnitude;
 						float diff = Vector3.Angle(pov, dir);
 						float final = dist + diff;
-						if (dist < _chunkSize * 2f) // Prioritize chunks immediately closest
+						if (dist < chunkSize * 2f) // Prioritize chunks immediately closest
 						{
 							final = dist;
 						}
@@ -290,11 +290,6 @@ public class World : MonoBehaviour
 		}
 
 		return rValue;
-	}
-
-	public static int GetChunkSize()
-	{
-		return _chunkSize;
 	}
 
 	public static int GetViewRange()

@@ -50,7 +50,7 @@ public class Chunk : MonoBehaviour
 		{
 			_state = State.Prepped;
 
-			_chunkSize = World.GetChunkSize();
+			_chunkSize = World.chunkSize;
 			_chunkPos = pos;
 			_chunkData = chunkData;
 		}
