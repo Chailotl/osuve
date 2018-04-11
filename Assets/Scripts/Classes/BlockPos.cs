@@ -8,19 +8,19 @@ public struct BlockPos : IEquatable<BlockPos>
 	public int x, y, z;
 
 	/// <summary>Shorthand for writing <c>BlockPos(0, 0, 0)</c>.</summary>
-	public static BlockPos zero = new BlockPos(0, 0, 0);
+	public readonly static BlockPos zero = new BlockPos(0, 0, 0);
 	/// <summary>Shorthand for writing <c>BlockPos(0, 1, 0)</c>.</summary>
-	public static BlockPos up = new BlockPos(0, 1, 0);
+	public readonly static BlockPos up = new BlockPos(0, 1, 0);
 	/// <summary>Shorthand for writing <c>BlockPos(0, -1, 0)</c>.</summary>
-	public static BlockPos down = new BlockPos(0, -1, 0);
+	public readonly static BlockPos down = new BlockPos(0, -1, 0);
 	/// <summary>Shorthand for writing <c>BlockPos(0, 0, 1)</c>.</summary>
-	public static BlockPos north = new BlockPos(0, 0, 1);
+	public readonly static BlockPos north = new BlockPos(0, 0, 1);
 	/// <summary>Shorthand for writing <c>BlockPos(0, 0, -1)</c>.</summary>
-	public static BlockPos south = new BlockPos(0, 0, -1);
+	public readonly static BlockPos south = new BlockPos(0, 0, -1);
 	/// <summary>Shorthand for writing <c>BlockPos(1, 0, 0)</c>.</summary>
-	public static BlockPos east = new BlockPos(1, 0, 0);
+	public readonly static BlockPos east = new BlockPos(1, 0, 0);
 	/// <summary>Shorthand for writing <c>BlockPos(-1, 0, 0)</c>.</summary>
-	public static BlockPos west = new BlockPos(-1, 0, 0);
+	public readonly static BlockPos west = new BlockPos(-1, 0, 0);
 
 	/// <summary>
 	/// Create a new <c>BlockPos</c> with <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> coordinates inside a ChunkPos.

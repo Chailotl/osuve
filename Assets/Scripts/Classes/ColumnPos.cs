@@ -6,15 +6,15 @@ public struct ColumnPos : IEquatable<ColumnPos>
 	public int x, z;
 
 	/// <summary>Shorthand for writing <c>ColumnPos(0, 0)</c>.</summary>
-	public static ColumnPos zero = new ColumnPos(0, 0);
+	public readonly static ColumnPos zero = new ColumnPos(0, 0);
 	/// <summary>Shorthand for writing <c>ColumnPos(0, 1)</c>.</summary>
-	public static ColumnPos north = new ColumnPos(0, 1);
+	public readonly static ColumnPos north = new ColumnPos(0, 1);
 	/// <summary>Shorthand for writing <c>ColumnPos(0, -1)</c>.</summary>
-	public static ColumnPos south = new ColumnPos(0, -1);
+	public readonly static ColumnPos south = new ColumnPos(0, -1);
 	/// <summary>Shorthand for writing <c>ColumnPos(1, 0)</c>.</summary>
-	public static ColumnPos east = new ColumnPos(1, 0);
+	public readonly static ColumnPos east = new ColumnPos(1, 0);
 	/// <summary>Shorthand for writing <c>ColumnPos(-1, 0)</c>.</summary>
-	public static ColumnPos west = new ColumnPos(-1, 0);
+	public readonly static ColumnPos west = new ColumnPos(-1, 0);
 
 	/// <summary>
 	/// Create a new <c>ColumnPos</c> using explicit <paramref name="x"/> and <paramref name="z"/> coordinates.
