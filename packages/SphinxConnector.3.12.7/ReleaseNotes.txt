@@ -1,0 +1,5 @@
+---------------------------------------
+SphinxConnector.NET 3.12.7 Release Notes
+---------------------------------------
+
+General: Fixed exception during license validation when running under .NET Core 2.0 in compatibility mode.
