@@ -15,13 +15,33 @@ public class Chunk : MonoBehaviour
 	private bool _updateMesh;
 	private bool _clearMesh;
 
-	/*
-	 * Fresh - The chunk has been freshly created, but it has no data associated
-	 * Prepped - The chunk now has its basic data
-	 * Generating - The chunk is actively generating or retrieving block data
-	 * Loaded - The chunk has its block data loaded
-	 * Rendered - The chunk is actively rendering
-	 */
+	/// <summary>
+	/// The possible states of the chunk.
+	/// </summary>
+	/// <remark>
+	/// <list type="bullet">
+	/// <item>
+	/// <term>Fresh</term>
+	/// <description>The chunk has been freshly created, but it has no data associated.</description>
+	/// </item>
+	/// <item>
+	/// <term>Prepped</term>
+	/// <description>The chunk now has its basic data.</description>
+	/// </item>
+	/// <item>
+	/// <term>Generating</term>
+	/// <description>The chunk is actively generating or retrieving block data.</description>
+	/// </item>
+	/// <item>
+	/// <term>Loaded</term>
+	/// <description>The chunk has its block data loaded.</description>
+	/// </item>
+	/// <item>
+	/// <term>Rendered</term>
+	/// <description>The chunk is actively rendering.</description>
+	/// </item>
+	/// </list>
+	/// </remark>
 	public enum State { Fresh, Prepped, Generating, Loaded, Rendered };
 
 	private State _state = State.Fresh;
@@ -43,6 +63,11 @@ public class Chunk : MonoBehaviour
 	public bool isolateMesh;
 	private bool _updateIso;
 
+	/// <summary>
+	/// Loads data into chunk.
+	/// </summary>
+	/// <param name="pos">Chunk position.</param>
+	/// <param name="chunkData">Chunk data.</param>
 	public void LoadData(ChunkPos pos, DataChunk chunkData)
 	{
 		// One-time only!
@@ -55,9 +80,11 @@ public class Chunk : MonoBehaviour
 			_chunkData = chunkData;
 		}
 	}
-
-	// We don't want others changing the state,
-	// so we'll ping the chunk to update it for itself
+	
+	/// <summary>
+	/// Lets chunk know it can properly update its state.
+	/// </summary>
+	/// <remarks>We don't want others to change the state manually.</remarks>
 	public void UpdateState()
 	{
 		switch (_state)
@@ -165,6 +192,9 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Tell chunk to generate its blocks.
+	/// </summary>
 	public void GenerateBlocks()
 	{
 		// Check if data chunk blocks are generated
@@ -175,6 +205,9 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Tell chunk to generate its mesh.
+	/// </summary>
 	public void GenerateMesh()
 	{
 		// Iterate through x, y, z
@@ -315,8 +348,12 @@ public class Chunk : MonoBehaviour
 
 		_updateMesh = true;
 	}
-
-	// Local block to world blocks
+	
+	/// <summary>
+	/// Get block from position.
+	/// </summary>
+	/// <param name="pos">Block position</param>
+	/// <returns>ID of block at position.</returns>
 	private Atlas.ID Block(BlockPos pos)
 	{
 		int x = pos.x;
@@ -340,6 +377,9 @@ public class Chunk : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Updates mesh.
+	/// </summary>
 	private void UpdateMesh()
 	{
 		if (_clearMesh)
@@ -535,6 +575,10 @@ public class Chunk : MonoBehaviour
 		_faceCount++;
 	}
 
+	/// <summary>
+	/// Get current state of chunk.
+	/// </summary>
+	/// <returns>Chunk state.</returns>
 	public State GetState()
 	{
 		return _state;

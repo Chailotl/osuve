@@ -2,17 +2,34 @@
 
 public struct BlockPos : IEquatable<BlockPos>
 {
+	/// <summary>The chunk this block is located in.</summary>
 	public ChunkPos chunkPos;
+	/// <summary>The local coordinate of this block.</summary>
 	public int x, y, z;
 
-	public static BlockPos zero = new BlockPos(ChunkPos.zero, 0, 0, 0);
-	public static BlockPos up = new BlockPos(ChunkPos.zero, 0, 1, 0);
-	public static BlockPos down = new BlockPos(ChunkPos.zero, 0, -1, 0);
-	public static BlockPos north = new BlockPos(ChunkPos.zero, 0, 0, 1);
-	public static BlockPos south = new BlockPos(ChunkPos.zero, 0, 0, -1);
-	public static BlockPos east = new BlockPos(ChunkPos.zero, 1, 0, 0);
-	public static BlockPos west = new BlockPos(ChunkPos.zero, -1, 0, 0);
+	/// <summary>Shorthand for writing <c>BlockPos(0, 0, 0)</c>.</summary>
+	public static BlockPos zero = new BlockPos(0, 0, 0);
+	/// <summary>Shorthand for writing <c>BlockPos(0, 1, 0)</c>.</summary>
+	public static BlockPos up = new BlockPos(0, 1, 0);
+	/// <summary>Shorthand for writing <c>BlockPos(0, -1, 0)</c>.</summary>
+	public static BlockPos down = new BlockPos(0, -1, 0);
+	/// <summary>Shorthand for writing <c>BlockPos(0, 0, 1)</c>.</summary>
+	public static BlockPos north = new BlockPos(0, 0, 1);
+	/// <summary>Shorthand for writing <c>BlockPos(0, 0, -1)</c>.</summary>
+	public static BlockPos south = new BlockPos(0, 0, -1);
+	/// <summary>Shorthand for writing <c>BlockPos(1, 0, 0)</c>.</summary>
+	public static BlockPos east = new BlockPos(1, 0, 0);
+	/// <summary>Shorthand for writing <c>BlockPos(-1, 0, 0)</c>.</summary>
+	public static BlockPos west = new BlockPos(-1, 0, 0);
 
+	/// <summary>
+	/// Create a new <c>BlockPos</c> with <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> coordinates inside a ChunkPos.
+	/// </summary>
+	/// <param name="chunkPos">Chunk position.</param>
+	/// <param name="x">Local x coordinate.</param>
+	/// <param name="y">Local y coordinate.</param>
+	/// <param name="z">Local z coordinate.</param>
+	/// <remarks>Coordinate overflow will offset <c>chunkPos</c>.</remarks>
 	public BlockPos(ChunkPos chunkPos, int x, int y, int z)
 	{
 		this.chunkPos = chunkPos;
@@ -23,38 +40,64 @@ public struct BlockPos : IEquatable<BlockPos>
 		Correct();
 	}
 
-	public BlockPos(int _x, int _y, int _z)
+	/// <summary>
+	/// Create a new <c>BlockPos</c> with <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> coordinates; ChunkPos.zero is assumed.
+	/// </summary>
+	/// <param name="x">Global x coordinate.</param>
+	/// <param name="y">Global y coordinate.</param>
+	/// <param name="z">Global z coordinate.</param>
+	/// <remarks><c>chunkPos</c> will be automatically set.</remarks>
+	public BlockPos(int x, int y, int z)
 	{
 		chunkPos = ChunkPos.zero;
-		x = _x;
-		y = _y;
-		z = _z;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 
 		Correct();
 	}
-
-	// Fancy methods
-
+	
+	/// <summary>
+	/// Returns global x coordinate.
+	/// </summary>
+	/// <returns>Global x coordinate.</returns>
 	public int GetWorldX()
 	{
 		return chunkPos.x * World.chunkSize + x;
 	}
 
+	/// <summary>
+	/// Returns global y coordinate.
+	/// </summary>
+	/// <returns>Global y coordinate.</returns>
 	public int GetWorldY()
 	{
 		return chunkPos.y * World.chunkSize + y;
 	}
 
+	/// <summary>
+	/// Returns global z coordinate.
+	/// </summary>
+	/// <returns>Global z coordinate.</returns>
 	public int GetWorldZ()
 	{
 		return chunkPos.z * World.chunkSize + z;
 	}
 
+	/// <summary>
+	/// The default C# modulus operator <c>%</c> returns negative numbers for negative input, which is undesirable.
+	/// </summary>
+	/// <param name="x">Input.</param>
+	/// <param name="m">Modulus.</param>
+	/// <returns>Always-positive output.</returns>
 	private int Mod(int x, int m)
 	{
 		return (x % m + m) % m;
 	}
 
+	/// <summary>
+	/// This corrects overflown coordinates, appropriately shifting <c>chunkPos</c> and clamping <c>x</c>, <c>y</c>, and <c>z</c>.
+	/// </summary>
 	private void Correct()
 	{
 		// Offset chunk

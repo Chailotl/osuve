@@ -8,6 +8,10 @@ public struct DataColumn
 	private int[,] _surface; // Start of stone layer
 	//private int[,] _light; // Highest opaque block
 
+	/// <summary>
+	/// Create a new <c>DataColumn</c> with a given position.
+	/// </summary>
+	/// <param name="pos">Column position.</param>
 	public DataColumn(ColumnPos pos)
 	{
 		_pos = pos;
@@ -24,6 +28,12 @@ public struct DataColumn
 		}
 	}
 
+	/// <summary>
+	/// Gets surface height from given position.
+	/// </summary>
+	/// <param name="x">X coordinate.</param>
+	/// <param name="z">Z coordinate.</param>
+	/// <returns>Height of terrain at given position.</returns>
 	public int GetSurface(int x, int z)
 	{
 		// Query is outside of our array

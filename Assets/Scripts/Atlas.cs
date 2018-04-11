@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class Atlas : MonoBehaviour
 {
+	/// <summary>List of block IDs.</summary>
 	public enum ID : ushort { Air, Solid, Stone, Grass, Dirt, Coal, Log, Leaves };
 
 	public static Dictionary<string, Color> Colors = new Dictionary<string, Color>();
 
+	/// <summary>Unit length of a cube in the texture atlas.</summary>
 	public readonly static float tUnit = 0.125f;
+	/// <summary>Directions.</summary>
 	public enum Dir { Up, Down, North, South, East, West };
 
 	private static Vector2[] _stone = { new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 2), new Vector2(0, 3) };
@@ -53,6 +56,12 @@ public class Atlas : MonoBehaviour
 		Colors["Tundra_4"] = new Color(58f / 255f, 74f / 255f, 45f / 255f);
 	}
 
+	/// <summary>
+	/// Gets the texure UV coordinate fora given block ID.
+	/// </summary>
+	/// <param name="id">BLock ID.</param>
+	/// <param name="dir">Block face.</param>
+	/// <returns>UV coordinate.</returns>
 	public static Vector2 GetTexture(ID id, Dir dir)
 	{
 		switch (id)

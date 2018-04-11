@@ -2,14 +2,26 @@
 
 public struct ColumnPos : IEquatable<ColumnPos>
 {
+	/// <summary>Coordinate.</summary>
 	public int x, z;
 
+	/// <summary>Shorthand for writing <c>ColumnPos(0, 0)</c>.</summary>
 	public static ColumnPos zero = new ColumnPos(0, 0);
+	/// <summary>Shorthand for writing <c>ColumnPos(0, 1)</c>.</summary>
 	public static ColumnPos north = new ColumnPos(0, 1);
+	/// <summary>Shorthand for writing <c>ColumnPos(0, -1)</c>.</summary>
 	public static ColumnPos south = new ColumnPos(0, -1);
+	/// <summary>Shorthand for writing <c>ColumnPos(1, 0)</c>.</summary>
 	public static ColumnPos east = new ColumnPos(1, 0);
+	/// <summary>Shorthand for writing <c>ColumnPos(-1, 0)</c>.</summary>
 	public static ColumnPos west = new ColumnPos(-1, 0);
 
+	/// <summary>
+	/// Create a new <c>ColumnPos</c> using explicit <paramref name="x"/> and <paramref name="z"/> coordinates.
+	/// </summary>
+	/// <remarks>ColumnPos are placed on an x-z plane and represent the corresponding y axis, hence why y is not used</remarks>
+	/// <param name="x">X coordinate.</param>
+	/// <param name="z">Z coordinate.</param>
 	public ColumnPos(int x, int z)
 	{
 		this.x = x;
