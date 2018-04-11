@@ -1,0 +1,38 @@
+ColumnPos
+*********
+
+.. default-domain:: csharp
+
+.. class:: ColumnPos
+
+	.. property:: int x { get; set; }
+	
+		X coordinate.
+	
+	.. property:: int z { get; set; }
+	
+		Z coordinate.
+		
+	.. property:: static ColumnPos zero { get; }
+	
+		Shorthand for writing ColumnPos(0, 0).
+	
+	.. property:: static ColumnPos north { get; }
+	
+		Shorthand for writing ColumnPos(0, 1).
+	
+	.. property:: static ColumnPos south { get; }
+	
+		Shorthand for writing ColumnPos(0, -1).
+	
+	.. property:: static ColumnPos east { get; }
+	
+		Shorthand for writing ColumnPos(1, 0).
+	
+	.. property:: static ColumnPos west { get; }
+	
+		Shorthand for writing ColumnPos(-1, 0).
+	
+	.. method:: ColumnPos (int x, int z)
+	
+		Create a new ColumnPos using explicit x and z coordinates.

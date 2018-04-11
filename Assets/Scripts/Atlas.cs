@@ -57,7 +57,7 @@ public class Atlas : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Gets the texure UV coordinate fora given block ID.
+	/// Gets the texure UV coordinate for a given block ID.
 	/// </summary>
 	/// <param name="id">BLock ID.</param>
 	/// <param name="dir">Block face.</param>
