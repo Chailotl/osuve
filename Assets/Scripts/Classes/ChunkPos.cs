@@ -7,19 +7,19 @@ public struct ChunkPos : IEquatable<ChunkPos>
 	public int x, y, z;
 
 	/// <summary>Shorthand for writing <c>ChunkPos(0, 0, 0)</c>.</summary>
-	public static ChunkPos zero = new ChunkPos(0, 0, 0);
+	public readonly static ChunkPos zero = new ChunkPos(0, 0, 0);
 	/// <summary>Shorthand for writing <c>ChunkPos(0, 1, 0)</c>.</summary>
-	public static ChunkPos up = new ChunkPos(0, 1, 0);
+	public readonly static ChunkPos up = new ChunkPos(0, 1, 0);
 	/// <summary>Shorthand for writing <c>ChunkPos(0, -1, 0)</c>.</summary>
-	public static ChunkPos down = new ChunkPos(0, -1, 0);
+	public readonly static ChunkPos down = new ChunkPos(0, -1, 0);
 	/// <summary>Shorthand for writing <c>ChunkPos(0, 0, 1)</c>.</summary>
-	public static ChunkPos north = new ChunkPos(0, 0, 1);
+	public readonly static ChunkPos north = new ChunkPos(0, 0, 1);
 	/// <summary>Shorthand for writing <c>ChunkPos(0, 0, -1)</c>.</summary>
-	public static ChunkPos south = new ChunkPos(0, 0, -1);
+	public readonly static ChunkPos south = new ChunkPos(0, 0, -1);
 	/// <summary>Shorthand for writing <c>ChunkPos(1, 0, 0)</c>.</summary>
-	public static ChunkPos east = new ChunkPos(1, 0, 0);
+	public readonly static ChunkPos east = new ChunkPos(1, 0, 0);
 	/// <summary>Shorthand for writing <c>ChunkPos(-1, 0, 0)</c>.</summary>
-	public static ChunkPos west = new ChunkPos(-1, 0, 0);
+	public readonly static ChunkPos west = new ChunkPos(-1, 0, 0);
 
 	/// <summary>
 	/// Create a new <c>ChunkPos</c> using explicit <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> coordinates.
