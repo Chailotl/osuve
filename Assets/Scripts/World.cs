@@ -13,6 +13,7 @@ public class World : MonoBehaviour
 	private SimplePriorityQueue<Chunk> _loadQueue = new SimplePriorityQueue<Chunk>();
 	private bool _rendering;
 
+	/// <summary>The size (width, breadth, and height) of chunks.</summary>
 	public const int chunkSize = 16;
 	[SerializeField] private static int _viewRangeHorizontal = 3;
 	[SerializeField] private static int _viewRangeVertical = 3;
@@ -65,6 +66,9 @@ public class World : MonoBehaviour
 		_rendering = false;
 	}
 
+	/// <summary>
+	/// Generates all possible chunk positions that are in view range if a chunk does not already exist at that position.
+	/// </summary>
 	private void GenerateChunks()
 	{
 		// Which direction is the player pointing in?
@@ -158,6 +162,9 @@ public class World : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Checks whether chunks are still in view range or not, and destroys them if need be.
+	/// </summary>
 	private void PingChunks()
 	{
 		List<ChunkPos> temp = new List<ChunkPos>();
@@ -202,21 +209,33 @@ public class World : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Safely removes a <c>Chunk</c> from the chunk dictionary.
+	/// </summary>
+	/// <param name="pos">The chunk position.</param>
 	private void DestroyChunk(ChunkPos pos)
 	{
 		Destroy(_chunks[pos].GetChunk()); // Delete corresponding gameobject
 		//_offloadChunks[pos] = _chunks[pos]; //Move chunk data to offload—technically should be disk or something
 		_chunks.Remove(pos); // Remove chunk from main list
 	}
-
-	// This gets blocks that have already been generated in the past
+	
+	/// <summary>
+	/// Fetches block that has already been generated in the past.
+	/// </summary>
+	/// <param name="pos">The block position.</param>
+	/// <returns>ID of block at given position.</returns>
 	public static Atlas.ID GetBlock(BlockPos pos)
 	{
 		return GenerateBlock(pos);
 		return _chunks[pos.chunkPos].GetBlock(pos);
 	}
-
-	// This is the main world generation function per block
+	
+	/// <summary>
+	/// Generates a block for a given position.
+	/// </summary>
+	/// <param name="pos">The block position.</param>
+	/// <returns>ID of generated block at given position.</returns>
 	public static Atlas.ID GenerateBlock(BlockPos pos)
 	{
 		int x = pos.GetWorldX();
@@ -231,9 +250,9 @@ public class World : MonoBehaviour
 		if (y <= stone)
 		{
 			// Caves
-			float caves = PerlinNoise(x, y * 2, z, 40, 12, 1);
-			caves += PerlinNoise(x, y, z, 30, 8, 0);
-			caves += PerlinNoise(x, y, z, 10, 4, 0);
+			float caves = SimplexNoise(x, y * 2, z, 40, 12, 1);
+			caves += SimplexNoise(x, y, z, 30, 8, 0);
+			caves += SimplexNoise(x, y, z, 10, 4, 0);
 			
 			if (caves > 16)
 			{
@@ -241,7 +260,7 @@ public class World : MonoBehaviour
 			}
 
 			// Underground ores
-			float coal = PerlinNoise(x, y, z, 20, 20, 0);
+			float coal = SimplexNoise(x, y, z, 20, 20, 0);
 
 			if (coal > 18)
 			{
@@ -264,27 +283,43 @@ public class World : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Generates the topological height of the stone layer for a given position.
+	/// </summary>
+	/// <param name="x">X coordinate.</param>
+	/// <param name="z">Y coordinate.</param>
+	/// <returns>Height of terrain at given position.</returns>
 	public static int GenerateTopology(int x, int z)
 	{
 		// Topology
-		float stone = PerlinNoise(x, 0, z, 10, 3, 1.2f);
-		stone += PerlinNoise(x, 300, z, 20, 4, 1f);
-		stone += PerlinNoise(x, 500, z, 100, 20, 1f);
+		float stone = SimplexNoise(x, 0, z, 10, 3, 1.2f);
+		stone += SimplexNoise(x, 300, z, 20, 4, 1f);
+		stone += SimplexNoise(x, 500, z, 100, 20, 1f);
 
 		// "Plateues"
-		if (PerlinNoise(x, 100, z, 100, 10, 1f) >= 9f)
+		if (SimplexNoise(x, 100, z, 100, 10, 1f) >= 9f)
 		{
 			stone += 10;
 		}
 
-		stone += Mathf.Clamp(PerlinNoise(x, 0, z, 50, 10, 5f), 0, 10); // Craters?
+		stone += Mathf.Clamp(SimplexNoise(x, 0, z, 50, 10, 5f), 0, 10); // Craters?
 		//float dirt = PerlinNoise(x, 100, z, 50, 2, 0) + 3; // At least 3 dirt
 		//float dirt = 3;
 
 		return (int) stone;
 	}
 
-	public static float PerlinNoise(float x, float y, float z, float scale, float height, float power)
+	/// <summary>
+	/// Returns simplex noise from a given point, modulated by some variables.
+	/// </summary>
+	/// <param name="x">X coordinate.</param>
+	/// <param name="y">Y coordinate.</param>
+	/// <param name="z">Z coordinate.</param>
+	/// <param name="scale">Coordinate scaling.</param>
+	/// <param name="height">Maximum height variation.</param>
+	/// <param name="power">"sharpness".</param>
+	/// <returns>Simplex noise from given point.</returns>
+	public static float SimplexNoise(float x, float y, float z, float scale, float height, float power)
 	{
 		float rValue;
 		rValue = Noise.Noise.GetNoise(((double)x) / scale, ((double)y) / scale, ((double)z) / scale);
@@ -298,22 +333,36 @@ public class World : MonoBehaviour
 		return rValue;
 	}
 
+	/// <summary>
+	/// Gets view range.
+	/// </summary>
+	/// <returns>View range.</returns>
 	public static int GetViewRange()
 	{
 		return _viewRangeHorizontal;
 	}
 
-	public static DataChunk GetChunk(ChunkPos chunkPos)
+	/// <summary>
+	/// Gets the <c>DataChunk</c> from the given <paramref name="pos"/>.
+	/// </summary>
+	/// <param name="pos">Chunk position.</param>
+	/// <returns><c>DataChunk</c> that exists at <paramref name="pos"/>.</returns>
+	public static DataChunk GetChunk(ChunkPos pos)
 	{
 		DataChunk chunk;
-		_chunks.TryGetValue(chunkPos, out chunk);
+		_chunks.TryGetValue(pos, out chunk);
 		return chunk;
 	}
 
-	public static DataColumn GetColumn(ColumnPos columnPos)
+	/// <summary>
+	/// Gets the <c>DataColumn</c> from the given <paramref name="pos"/>.
+	/// </summary>
+	/// <param name="pos">Column position.</param>
+	/// <returns><c>DataColumn</c> that exists at <paramref name="pos"/>.</returns>
+	public static DataColumn GetColumn(ColumnPos pos)
 	{
 		DataColumn column;
-		_columns.TryGetValue(columnPos, out column);
+		_columns.TryGetValue(pos, out column);
 		return column;
 	}
 }

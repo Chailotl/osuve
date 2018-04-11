@@ -12,6 +12,12 @@ public class DataChunk
 	private bool _generated;
 	private int _density;
 
+	/// <summary>
+	/// Create a new <c>DataChunk</c>.
+	/// </summary>
+	/// <param name="pos">Chunk position.</param>
+	/// <param name="chunk">Chunk GameObject.</param>
+	/// <param name="column">Column data.</param>
 	public DataChunk(ChunkPos pos, Chunk chunk, DataColumn column)
 	{
 		_pos = pos;
@@ -23,6 +29,9 @@ public class DataChunk
 		_density = 0;
 	}
 
+	/// <summary>
+	/// Tell DataChunk to generate its blocks.
+	/// </summary>
 	public void GenerateBlocks()
 	{
 		for (int x = 0; x < World.chunkSize; ++x)
@@ -54,6 +63,12 @@ public class DataChunk
 		_chunk.UpdateState();
 	}
 
+	/// <summary>
+	/// Set block at given position.
+	/// </summary>
+	/// <param name="block">Block ID.</param>
+	/// <param name="pos">Block position.</param>
+	/// <remarks>To set <c>Atlas.ID.Air</c>, you need to use <see cref="DataChunk.RemoveBlock(BlockPos)"/></remarks>
 	public void SetBlock(Atlas.ID block, BlockPos pos)
 	{
 		// Do not give us air!
@@ -72,6 +87,10 @@ public class DataChunk
 		++_density;
 	}
 
+	/// <summary>
+	/// Remove block at given position.
+	/// </summary>
+	/// <param name="pos">Block position.</param>
 	public void RemoveBlock(BlockPos pos)
 	{
 		// Something is amiss, it should be our chunk pos
@@ -88,6 +107,11 @@ public class DataChunk
 		}
 	}
 
+	/// <summary>
+	/// Get block at given position.
+	/// </summary>
+	/// <param name="pos">Block position.</param>
+	/// <returns>Block ID at given position.</returns>
 	public Atlas.ID GetBlock(BlockPos pos)
 	{
 		// Empty!
@@ -101,26 +125,46 @@ public class DataChunk
 		return _blocks[pos.x, pos.y, pos.z];
 	}
 
+	/// <summary>
+	/// Assign <c>Chunk</c> script.
+	/// </summary>
+	/// <param name="chunk"><c>Chunk</c> script.</param>
 	public void SetChunk(Chunk chunk)
 	{
 		_chunk = chunk;
 	}
 
+	/// <summary>
+	/// Get <c>Chunk</c> script.
+	/// </summary>
+	/// <returns><c>Chunk</c> script.</returns>
 	public Chunk GetChunk()
 	{
 		return _chunk;
 	}
 
+	/// <summary>
+	/// Get column data.
+	/// </summary>
+	/// <returns>Column data.</returns>
 	public DataColumn GetColumn()
 	{
 		return _column;
 	}
 
+	/// <summary>
+	/// Checks whether the data chunk's blocks are generated.
+	/// </summary>
+	/// <returns>State of generation.</returns>
 	public bool IsGenerated()
 	{
 		return _generated;
 	}
 
+	/// <summary>
+	/// Checks whether chunk is empty.
+	/// </summary>
+	/// <returns>State of emptiness.</returns>
 	public bool IsEmpty()
 	{
 		return (_density == 0);
