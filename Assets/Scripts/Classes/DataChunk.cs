@@ -40,7 +40,7 @@ public class DataChunk
 			{
 				for (int z = 0; z < World.chunkSize; ++z)
 				{
-					Atlas.ID block = World.GenerateBlock(new BlockPos(_pos, x, y, z));
+					Atlas.ID block = World.GenerateBlock(new BlockPos(x, y, z, _pos));
 
 					// Skip air
 					if (block == Atlas.ID.Air)

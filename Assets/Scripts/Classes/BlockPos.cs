@@ -25,12 +25,12 @@ public struct BlockPos : IEquatable<BlockPos>
 	/// <summary>
 	/// Create a new <c>BlockPos</c> with <paramref name="x"/>, <paramref name="y"/>, and <paramref name="z"/> coordinates inside a ChunkPos.
 	/// </summary>
-	/// <param name="chunkPos">Chunk position.</param>
 	/// <param name="x">Local x coordinate.</param>
 	/// <param name="y">Local y coordinate.</param>
 	/// <param name="z">Local z coordinate.</param>
+	/// <param name="chunkPos">Chunk position.</param>
 	/// <remarks>Coordinate overflow will offset <c>chunkPos</c>.</remarks>
-	public BlockPos(ChunkPos chunkPos, int x, int y, int z)
+	public BlockPos(int x, int y, int z, ChunkPos chunkPos)
 	{
 		this.chunkPos = chunkPos;
 		this.x = x;

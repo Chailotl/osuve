@@ -217,7 +217,7 @@ public class Chunk : MonoBehaviour
 			{
 				for (int z = 0; z < _chunkSize; z++)
 				{
-					BlockPos pos = new BlockPos(_chunkPos, x, y, z);
+					BlockPos pos = new BlockPos(x, y, z, _chunkPos);
 
 					Atlas.ID block = Block(pos);
 
