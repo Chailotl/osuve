@@ -4,11 +4,11 @@ public struct ColumnPos : IEquatable<ColumnPos>
 {
 	public int x, z;
 
-	public static ChunkPos zero = new ChunkPos(0, 0, 0);
-	public static ChunkPos north = new ChunkPos(0, 0, 1);
-	public static ChunkPos south = new ChunkPos(0, 0, -1);
-	public static ChunkPos east = new ChunkPos(1, 0, 0);
-	public static ChunkPos west = new ChunkPos(-1, 0, 0);
+	public static ColumnPos zero = new ColumnPos(0, 0);
+	public static ColumnPos north = new ColumnPos(0, 1);
+	public static ColumnPos south = new ColumnPos(0, -1);
+	public static ColumnPos east = new ColumnPos(1, 0);
+	public static ColumnPos west = new ColumnPos(-1, 0);
 
 	public ColumnPos(int x1, int z1)
 	{
