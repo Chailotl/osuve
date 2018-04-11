@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search &mdash; osuve 0.0.1 documentation</title>
+  <title>DataColumn &mdash; osuve 0.0.1 documentation</title>
   
 
   
@@ -28,7 +28,9 @@
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ChunkPos" href="docs_ChunkPos.html" />
+    <link rel="prev" title="DataChunk" href="docs_DataChunk.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -60,7 +62,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -78,12 +80,12 @@
             
             
               <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="docs_World.html">World</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs_Chunk.html">Chunk</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs_Atlas.html">Atlas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs_DataChunk.html">DataChunk</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs_DataColumn.html">DataColumn</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DataColumn</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Struct Documentation</span></p>
 <ul>
@@ -135,12 +137,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Search</li>
+      <li>DataColumn</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/docs_DataColumn.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -152,24 +156,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="datacolumn">
+<h1>DataColumn<a class="headerlink" href="#datacolumn" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="class-DataColumn">
+<code class="descname">class DataColumn</code><a class="headerlink" href="#class-DataColumn" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="property">
+<dt id="property-DataColumn._pos">
+<a class="reference internal" href="docs_ColumnPos.html#class-ColumnPos" title="ColumnPos class">ColumnPos</a> <code class="descname">_pos</code> { <em class="property"></em> }<a class="headerlink" href="#property-DataColumn._pos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-  
-  <div id="search-results">
-  
-  </div>
+<dl class="property">
+<dt id="property-DataColumn._surface">
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a>[] <code class="descname">_surface</code> { <em class="property"></em> }<a class="headerlink" href="#property-DataColumn._surface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-DataColumn.DataColumn">
+<code class="descname">DataColumn</code> <span class="sig-paren">(</span><a class="reference internal" href="docs_ColumnPos.html#class-ColumnPos" title="ColumnPos class">ColumnPos</a> <em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#method-DataColumn.DataColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="#class-DataColumn" title="DataColumn class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">DataColumn</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-DataColumn.GetSurface">
+<em>public</em> <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <code class="descname">GetSurface</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#method-DataColumn.GetSurface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets surface height from given position.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="docs_ChunkPos.html" class="btn btn-neutral float-right" title="ChunkPos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="docs_DataChunk.html" class="btn btn-neutral" title="DataChunk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -209,7 +240,6 @@
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -224,14 +254,7 @@
           SphinxRtdTheme.Navigation.enableSticky();
           
       });
-  </script>
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
-   
-
+  </script> 
 
 </body>
 </html>

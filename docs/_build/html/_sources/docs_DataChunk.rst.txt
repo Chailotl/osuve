@@ -5,10 +5,49 @@ DataChunk
 
 .. class:: DataChunk
 
+	.. property:: ChunkPos _pos { }
+	.. property:: Chunk _chunk { }
+	.. property:: Atlas.ID[] _blocks { }
+	.. property:: DataColumn _column { }
+	.. property:: bool _generated { }
+	.. property:: int _density { }
+	
 	.. method:: DataChunk (ChunkPos pos, Chunk chunk, DataColumn column)
-
-		A constructor for the class.
 	
-	.. method:: GenerateBlocks ()
+		Create a new :type:`DataChunk`.
 	
-		Tell DataChunk to generate its blocks.
+	.. method:: public void GenerateBlocks ()
+	
+		Tell :type:`DataChunk` to generate its blocks.
+	
+	.. method:: public void SetBlock (Atlas.ID block, BlockPos pos)
+	
+		Set block at given position.
+	
+	.. method:: public void RemoveBlock (BlockPos pos)
+	
+		Remove block at given position.
+	
+	.. method:: public Atlas.ID GetBlock (BlockPos pos)
+	
+		Get block at given position.
+	
+	.. method:: public void SetChunk (Chunk chunk)
+	
+		Assign :type:`Chunk` script.
+	
+	.. method:: public Chunk GetChunk ()
+	
+		Get :type:`Chunk` script.
+	
+	.. method:: public DataColumn GetColumn()
+	
+		Get column data.
+	
+	.. method:: public bool IsGenerated ()
+	
+		Checks whether the data chunk's blocks are generated.
+	
+	.. method:: public bool IsEmpty ()
+	
+		Checks whether chunk is empty.

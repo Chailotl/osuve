@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Chunk &mdash; osuve 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Atlas" href="docs_Atlas.html" />
+    <link rel="prev" title="World" href="docs_World.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> osuve
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="docs_World.html">World</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Chunk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs_Atlas.html">Atlas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs_DataChunk.html">DataChunk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs_DataColumn.html">DataColumn</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Struct Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="docs_ChunkPos.html">ChunkPos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs_ColumnPos.html">ColumnPos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs_BlockPos.html">BlockPos</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">osuve</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Chunk</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/docs_Chunk.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="chunk">
+<h1>Chunk<a class="headerlink" href="#chunk" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="class-Chunk">
+<code class="descname">class Chunk</code><a class="headerlink" href="#class-Chunk" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="property">
+<dt id="property-Chunk._newVerts">
+List&lt;Vector3&gt; <code class="descname">_newVerts</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._newVerts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._newTris">
+List&lt;<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a>&gt; <code class="descname">_newTris</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._newTris" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._newUV">
+List&lt;Vector2&gt; <code class="descname">_newUV</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._newUV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._newColors">
+List&lt;Color&gt; <code class="descname">_newColors</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._newColors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._faceCount">
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <code class="descname">_faceCount</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._faceCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._mesh">
+Mesh <code class="descname">_mesh</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._mesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._col">
+MeshCollider <code class="descname">_col</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._col" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._updateMesh">
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.boolean.aspx" title="System.Boolean">Boolean</a> <code class="descname">_updateMesh</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._updateMesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._clearMesh">
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.boolean.aspx" title="System.Boolean">Boolean</a> <code class="descname">_clearMesh</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._clearMesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._state">
+<a class="reference internal" href="#enum-Chunk.State" title="Chunk.State enum">State</a> <code class="descname">_state</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._chunkSize">
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <code class="descname">_chunkSize</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._chunkSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._chunkPos">
+<a class="reference internal" href="docs_ChunkPos.html#class-ChunkPos" title="ChunkPos class">ChunkPos</a> <code class="descname">_chunkPos</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._chunkPos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Chunk._chunkData">
+<a class="reference internal" href="docs_DataChunk.html#class-DataChunk" title="DataChunk class">DataChunk</a> <code class="descname">_chunkData</code> { <em class="property"></em> }<a class="headerlink" href="#property-Chunk._chunkData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.LoadData">
+<em>public</em> void <code class="descname">LoadData</code> <span class="sig-paren">(</span><a class="reference internal" href="docs_ChunkPos.html#class-ChunkPos" title="ChunkPos class">ChunkPos</a> <em>pos</em>, <a class="reference internal" href="docs_DataChunk.html#class-DataChunk" title="DataChunk class">DataChunk</a> <em>chunkData</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.LoadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads data into chunk.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.UpdateState">
+<em>public</em> void <code class="descname">UpdateState</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.UpdateState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lets chunk know it can properly update its state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.GenerateBlocks">
+<em>public</em> void <code class="descname">GenerateBlocks</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.GenerateBlocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells chunk to generate its blocks.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.GenerateMesh">
+<em>public</em> void <code class="descname">GenerateMesh</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.GenerateMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells chunk to generate its mesh.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.Block">
+<a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <code class="descname">Block</code> <span class="sig-paren">(</span><a class="reference internal" href="docs_BlockPos.html#class-BlockPos" title="BlockPos class">BlockPos</a> <em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.Block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get block from position</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.UpdateMesh">
+<code class="descname">UpdateMesh</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.UpdateMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates mesh.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeUp">
+void <code class="descname">CubeUp</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeDown">
+void <code class="descname">CubeDown</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeNorth">
+void <code class="descname">CubeNorth</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeNorth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeSouth">
+void <code class="descname">CubeSouth</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeSouth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeEast">
+void <code class="descname">CubeEast</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeEast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.CubeWest">
+void <code class="descname">CubeWest</code> <span class="sig-paren">(</span><a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>x</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>y</em>, <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.int32.aspx" title="System.Int32">Int32</a> <em>z</em>, <a class="reference internal" href="docs_Atlas.html#enum-Atlas.ID" title="Atlas.ID enum">Atlas.ID</a> <em>block</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.CubeWest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-Chunk.Cube">
+void <code class="descname">Cube</code> <span class="sig-paren">(</span>Vector2 <em>texturePos</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Chunk.Cube" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="enum">
+<dt id="enum-Chunk.State">
+<code class="descname">enum State</code><a class="headerlink" href="#enum-Chunk.State" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="value">
+<dt id="value-Chunk.State.Fresh">
+<code class="descname">Fresh</code><a class="headerlink" href="#value-Chunk.State.Fresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The chunk has been freshly created, but it has no data associated.</p>
+</dd></dl>
+
+<dl class="value">
+<dt id="value-Chunk.State.Prepped">
+<code class="descname">Prepped</code><a class="headerlink" href="#value-Chunk.State.Prepped" title="Permalink to this definition">¶</a></dt>
+<dd><p>The chunk now has its basic data.</p>
+</dd></dl>
+
+<dl class="value">
+<dt id="value-Chunk.State.Generating">
+<code class="descname">Generating</code><a class="headerlink" href="#value-Chunk.State.Generating" title="Permalink to this definition">¶</a></dt>
+<dd><p>The chunk is actively generating or retrieving block data.</p>
+</dd></dl>
+
+<dl class="value">
+<dt id="value-Chunk.State.Loaded">
+<code class="descname">Loaded</code><a class="headerlink" href="#value-Chunk.State.Loaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>The chunk has its block data loaded.</p>
+</dd></dl>
+
+<dl class="value">
+<dt id="value-Chunk.State.Rendered">
+<code class="descname">Rendered</code><a class="headerlink" href="#value-Chunk.State.Rendered" title="Permalink to this definition">¶</a></dt>
+<dd><p>The chunk is actively rendering.</p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="docs_Atlas.html" class="btn btn-neutral float-right" title="Atlas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="docs_World.html" class="btn btn-neutral" title="World" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Raus.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

@@ -221,7 +221,7 @@ public class World : MonoBehaviour
 	}
 	
 	/// <summary>
-	/// Fetches block that has already been generated in the past.
+	/// Fetches a block that has already been generated in the past.
 	/// </summary>
 	/// <param name="pos">The block position.</param>
 	/// <returns>ID of block at given position.</returns>
@@ -284,7 +284,7 @@ public class World : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Generates the topological height of the stone layer for a given position.
+	/// Generates the topological height of the stone layer for a given coordinate.
 	/// </summary>
 	/// <param name="x">X coordinate.</param>
 	/// <param name="z">Y coordinate.</param>

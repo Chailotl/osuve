@@ -14,11 +14,11 @@ DataChunk
 	
 	.. method:: DataChunk (ChunkPos pos, Chunk chunk, DataColumn column)
 	
-		Create a new :type:`DataChunk`.
+		Create a new DataChunk.
 	
 	.. method:: public void GenerateBlocks ()
 	
-		Tell :type:`DataChunk` to generate its blocks.
+		Tell DataChunk to generate its blocks.
 	
 	.. method:: public void SetBlock (Atlas.ID block, BlockPos pos)
 	
@@ -34,11 +34,11 @@ DataChunk
 	
 	.. method:: public void SetChunk (Chunk chunk)
 	
-		Assign :type:`Chunk` script.
+		Assign Chunk script.
 	
 	.. method:: public Chunk GetChunk ()
 	
-		Get :type:`Chunk` script.
+		Get Chunk script.
 	
 	.. method:: public DataColumn GetColumn()
 	
