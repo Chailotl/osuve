@@ -49,6 +49,11 @@ public struct ColumnPos : IEquatable<ColumnPos>
 		return new ColumnPos(lhs.x + rhs.x, lhs.z + rhs.z);
 	}
 
+	public static ColumnPos operator -(ColumnPos lhs, ColumnPos rhs)
+	{
+		return new ColumnPos(lhs.x - rhs.x, lhs.z - rhs.z);
+	}
+
 	public static bool operator ==(ColumnPos lhs, ColumnPos rhs)
 	{
 		return (lhs.x == rhs.x && lhs.z == rhs.z);
