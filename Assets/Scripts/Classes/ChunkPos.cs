@@ -13,11 +13,11 @@ public struct ChunkPos : IEquatable<ChunkPos>
 	public static ChunkPos east = new ChunkPos(1, 0, 0);
 	public static ChunkPos west = new ChunkPos(-1, 0, 0);
 
-	public ChunkPos(int x1, int y1, int z1)
+	public ChunkPos(int x, int y, int z)
 	{
-		x = x1;
-		y = y1;
-		z = z1;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	public ChunkPos(Vector3 vec)

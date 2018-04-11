@@ -10,10 +10,10 @@ public struct ColumnPos : IEquatable<ColumnPos>
 	public static ColumnPos east = new ColumnPos(1, 0);
 	public static ColumnPos west = new ColumnPos(-1, 0);
 
-	public ColumnPos(int x1, int z1)
+	public ColumnPos(int x, int z)
 	{
-		x = x1;
-		z = z1;
+		this.x = x;
+		this.z = z;
 	}
 
 	// Base methods

@@ -13,12 +13,12 @@ public struct BlockPos : IEquatable<BlockPos>
 	public static BlockPos east = new BlockPos(ChunkPos.zero, 1, 0, 0);
 	public static BlockPos west = new BlockPos(ChunkPos.zero, -1, 0, 0);
 
-	public BlockPos(ChunkPos _chunkPos, int _x, int _y, int _z)
+	public BlockPos(ChunkPos chunkPos, int x, int y, int z)
 	{
-		chunkPos = _chunkPos;
-		x = _x;
-		y = _y;
-		z = _z;
+		this.chunkPos = chunkPos;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 
 		Correct();
 	}
