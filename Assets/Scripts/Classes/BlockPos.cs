@@ -140,12 +140,12 @@ public struct BlockPos : IEquatable<BlockPos>
 
 	public static BlockPos operator +(BlockPos lhs, BlockPos rhs)
 	{
-		return new BlockPos(lhs.chunkPos + rhs.chunkPos, lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+		return new BlockPos(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.chunkPos + rhs.chunkPos);
 	}
 
 	public static BlockPos operator -(BlockPos lhs, BlockPos rhs)
 	{
-		return new BlockPos(lhs.chunkPos - rhs.chunkPos, lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+		return new BlockPos(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.chunkPos - rhs.chunkPos);
 	}
 
 	public static bool operator ==(BlockPos lhs, BlockPos rhs)
